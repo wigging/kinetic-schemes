@@ -7,7 +7,9 @@ from __future__ import print_function
 from __future__ import division
 
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as py
+
+py.close('all')
 
 #--- parameters from Papadikis2010a
 rhow = 700  # density of wood, kg/m^3
@@ -32,19 +34,19 @@ K4 = A4 * np.exp(-E4 / (R * T))   # tar -> gas
 K5 = A5 * np.exp(-E5 / (R * T))   # tar -> char
 
 #--- plot T vs K
-plt.figure(1)
-plt.plot(T, K1, label='K1 wood > gas')
-plt.plot(T, K2, label='K2 wood > tar')
-plt.plot(T, K3, label='K3 wood > char')
-plt.plot(T, K4, label='K4 tar > gas')
-plt.plot(T, K5, label='K5 tar > char')
-plt.legend(loc='best', numpoints=1)
-plt.xlabel('Temperature (K)')
-plt.ylabel('K, reaction rate')
-plt.rcParams['xtick.major.pad'] = 8
-plt.rcParams['ytick.major.pad'] = 8
-plt.grid()
-plt.show()
+py.figure(1)
+py.plot(T, K1, label='K1 wood > gas')
+py.plot(T, K2, label='K2 wood > tar')
+py.plot(T, K3, label='K3 wood > char')
+py.plot(T, K4, label='K4 tar > gas')
+py.plot(T, K5, label='K5 tar > char')
+py.legend(loc='best', numpoints=1)
+py.xlabel('Temperature (K)')
+py.ylabel('K, reaction rate constant (1/s)')
+py.rcParams['xtick.major.pad'] = 8
+py.rcParams['ytick.major.pad'] = 8
+py.grid()
+py.show()
 
 #--- initial calculations
 dt = 0.01   # time step, delta t
@@ -88,30 +90,30 @@ for i in range(1, p):
     pc.append(pc[i-1] + (rwc[i] + rtc[i])*dt)
 
 #--- plot t vs r and t vs p
-plt.figure(2)
-plt.plot(t, rww, label='rww')
-plt.plot(t, rwg, label='rwg')
-plt.plot(t, rwt, label='rwt')
-plt.plot(t, rwc, label='rwc')
-plt.plot(t, rtg, label='rtg')
-plt.plot(t, rtc, label='rtc')
-plt.legend(loc='best', numpoints=1)
-plt.xlabel('Time (s)')
-plt.ylabel('Rate')
-plt.rcParams['xtick.major.pad'] = 8
-plt.rcParams['ytick.major.pad'] = 8
-plt.grid()
-plt.show()
+py.figure(2)
+py.plot(t, rww, label='rww')
+py.plot(t, rwg, label='rwg')
+py.plot(t, rwt, label='rwt')
+py.plot(t, rwc, label='rwc')
+py.plot(t, rtg, label='rtg')
+py.plot(t, rtc, label='rtc')
+py.legend(loc='best', numpoints=1)
+py.xlabel('Time (s)')
+py.ylabel('r, reaction rate (rho/s)')
+py.rcParams['xtick.major.pad'] = 8
+py.rcParams['ytick.major.pad'] = 8
+py.grid()
+py.show()
 
-plt.figure(3)
-plt.plot(t, pw, label='pw')
-plt.plot(t, pg, label='pg')
-plt.plot(t, pt, label='pt')
-plt.plot(t, pc, label='pc')
-plt.legend(loc='best', numpoints=1)
-plt.xlabel('Time (s)')
-plt.ylabel('Density ($kg/m^3$)')
-plt.rcParams['xtick.major.pad'] = 8
-plt.rcParams['ytick.major.pad'] = 8
-plt.grid()
-plt.show()
+py.figure(3)
+py.plot(t, pw, label='pw')
+py.plot(t, pg, label='pg')
+py.plot(t, pt, label='pt')
+py.plot(t, pc, label='pc')
+py.legend(loc='best', numpoints=1)
+py.xlabel('Time (s)')
+py.ylabel('Density ($kg/m^3$)')
+py.rcParams['xtick.major.pad'] = 8
+py.rcParams['ytick.major.pad'] = 8
+py.grid()
+py.show()

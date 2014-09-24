@@ -1,4 +1,4 @@
-# Kinetic approach where wood density is calculated based on time
+# Kinetic approach based on wood density as function of time
 # pw = rhow*exp(-(K1+K2+K3)*t)
 
 # use Python 3 print function

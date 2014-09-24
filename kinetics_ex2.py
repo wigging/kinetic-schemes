@@ -1,4 +1,4 @@
-# Kinetic approach where wood density is calculated based on reaction rate
+# Kinetic approach based on initial wood density and reaction rates
 # pw = pwi + rww*dt
 
 # use Python 3 print function

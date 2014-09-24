@@ -1,4 +1,4 @@
-# Plot kinetics at different times
+# Tar production at different wood densities
 # kinetic scheme based on Chan1985 and Blasi1993b
 
 # use Python 3 functions
