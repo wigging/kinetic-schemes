@@ -44,10 +44,10 @@ Kwp = Aw * np.exp(-Ew / (R * Tp))   # water -> vapor
 # Initial calculations
 #------------------------------------------------------------------------------
 
-dt = 0.01   # time step, delta t
-tmax = 25   # max time, s
+dt = 0.01                               # time step, delta t
+tmax = 25                               # max time, s
 t = np.linspace(0, tmax, num=tmax/dt)   # time vector
-p = len(t)  # total number of time steps
+p = len(t)                              # total number of time steps
 
 # Reaction rate constants, 1/s
 #------------------------------------------------------------------------------
