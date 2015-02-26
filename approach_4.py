@@ -41,15 +41,15 @@ p = len(t)  # total number of time steps
 
 # vectors for wood, char, gas, tar concentrations as a density, kg/m^3
 pw = np.zeros(len(t))   # wood 
-pc = np.zeros(len(t))   # char
 pg = np.zeros(len(t))   # gas
-pt = np.zeros(len(t))   # tar 
+pt = np.zeros(len(t))   # tar
+pc = np.zeros(len(t))   # char
 
 pw[0] = rhow # initial wood density
 
 # kinetics for primary and secondary reactions
 for i in range(1, p):
-    pw[i], pc[i], pg[i], pt[i] = kn.chanblasi(Tinf, pw, pc, pg, pt, dt, i)
+    pw[i], pg[i], pt[i], pc[i] = kn.chanblasi(Tinf, pw, pg, pt, pc, dt, i)
 
 # Plot Results
 #------------------------------------------------------------------------------
