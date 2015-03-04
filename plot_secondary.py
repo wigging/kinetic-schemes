@@ -1,11 +1,9 @@
 """
-Plot product yields from primary reactions of biomass pyrolysis. Reactions are 
-provided by the kinetic scheme in a separate function file.
+Plot product yields from primary & secondary reactions of biomass pyrolysis. 
+Reactions are provided by the kinetic scheme in a separate function file.
 
 Function Files:
-funcChan.py
-funcFont.py
-funcThurner.py
+funcPapadikis.py
 funcJanse.py
 
 Requirements:
@@ -22,10 +20,8 @@ import numpy as np
 import matplotlib.pyplot as py
 py.close('all')
 
-import funcChan as kn0
-import funcFont as kn1
-import funcThurner as kn2
-import funcJanse as kn3
+import funcPapadikis as kn0
+import funcJanse as kn1
 
 # Parameters from Papadikis 2010a
 #------------------------------------------------------------------------------
@@ -55,19 +51,16 @@ pc = np.zeros([5, len(t)])   # char array
 pw[:] = rhow # initial wood density
 
 # assign kinetic scheme to a particular row
-pw0 = pw[0]; pc0 = pc[0]; pg0 = pg[0]; pt0 = pt[0]  # Chan kinetic scheme
-pw1 = pw[1]; pc1 = pc[1]; pg1 = pg[1]; pt1 = pt[1]  # Font kinetic scheme
-pw2 = pw[2]; pc2 = pc[2]; pg2 = pg[2]; pt2 = pt[2]  # Thurner kinetic scheme
-pw3 = pw[3]; pc3 = pc[3]; pg3 = pg[3]; pt3 = pt[3]  # Janse kinetic scheme
+pw0 = pw[0]; pc0 = pc[0]; pg0 = pg[0]; pt0 = pt[0]  # Papadikis kinetic scheme
+pw1 = pw[1]; pc1 = pc[1]; pg1 = pg[1]; pt1 = pt[1]  # Janse kinetic scheme
+
 
 # assign kinetic scheme to a particular row
 
 # kinetics for primary reactions
 for i in range(1, p):
-    pw[0,i], pg[0,i], pt[0,i], pc[0,i] = kn0.chan2(Tinf, pw0, pg0, pt0, pc0, dt, i)
-    pw[1,i], pg[1,i], pt[1,i], pc[1,i] = kn1.font1(Tinf, pw1, pg1, pt1, pc1, dt, i)
-    pw[2,i], pg[2,i], pt[2,i], pc[2,i] = kn2.thurner(Tinf, pw2, pg2, pt2, pc2, dt, i)
-    pw[3,i], pg[3,i], pt[3,i], pc[3,i] = kn3.janse1(Tinf, pw3, pg3, pt3, pc3, dt, i)
+    pw[0,i], pg[0,i], pt[0,i], pc[0,i] = kn0.papadikis2(Tinf, pw0, pg0, pt0, pc0, dt, i)
+    pw[1,i], pg[1,i], pt[1,i], pc[1,i] = kn1.janse2(Tinf, pw1, pg1, pt1, pc1, dt, i)
 
 # convert concentrations to percent
 wood = pw/rhow*100
@@ -83,23 +76,19 @@ py.rcParams['ytick.major.pad'] = 8
 py.rcParams['lines.linewidth'] = 2
 py.rcParams['axes.grid'] = True
 
-py.figure(1)
-py.plot(t, wood[0], label='Chan 1985')
-py.plot(t, wood[1], label='Font 1990')
-py.plot(t, wood[2], label='Thurner 1981')
-py.plot(t, wood[3], label='Janse 2000')
-py.title('Wood Conversion, primary reactions at T = {} K'.format(Tinf))
+py.figure(3)
+py.plot(t, wood[0], label='Papadikis 2010')
+py.plot(t, wood[1], label='Janse 2000')
+py.title('Wood Conversion, primary & secondary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
 py.ylabel('Wood Conversion (% Dry Basis)')
 py.legend(loc='best', numpoints=1)
 py.show()
 
-py.figure(2)
-py.plot(t, tar[0], label='Chan 1985')
-py.plot(t, tar[1], label='Font 1990')
-py.plot(t, tar[2], label='Thurner 1981')
-py.plot(t, tar[3], label='Janse 2000')
-py.title('Tar Yield, primary reactions at T = {} K'.format(Tinf))
+py.figure(4)
+py.plot(t, tar[0], label='Papadikis 2010')
+py.plot(t, tar[1], label='Janse 2000')
+py.title('Tar Yield, primary & secondary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
 py.ylabel('Tar Yield (% Dry Basis)')
 py.legend(loc='best', numpoints=1)

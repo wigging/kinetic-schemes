@@ -14,7 +14,7 @@ import numpy as np
 # Function
 # -----------------------------------------------------------------------------
 
-def thurnermann(T, pw, pg, pt, pc, dt, i):
+def thurner(T, pw, pg, pt, pc, dt, i):
     """
     INPUTS:
     T = temperature, K

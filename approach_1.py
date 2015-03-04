@@ -1,13 +1,15 @@
 """
-Kinetic solution based on wood density as function of time, for example 
-pw = rhow*exp(-(K1+K2+K3)*t).
+Analytical solution for a system of kinetic reactions for biomass pyrolysis.
+Wood density as function of time, for example pw = rhow*exp(-(K1+K2+K3)*t).
 
 Requirements:
 Pyton 3, Numpy, Matplotlib
 
 References:
-1) Papadikis 2010a
-2) Chan 1985 and Blasi 1993b
+1) Papadikis, Gu, Bridgwater, 2010. Fuel Processing Technology, 91(1), pp.68–79.
+2) Chan, Kelbon, Krieger, 1985. Fuel, 64(11), pp.1505–1513.
+3) Liden, Berruti, Scott, 1988. Chemical Engineering Communications, 65, pp.207–221.
+4) Blasi, 1993. Combustion Science and Technology, 90, pp.315–340.
 """
 
 # Modules
@@ -21,7 +23,7 @@ import matplotlib.pyplot as py
 rhow = 700  # density of wood, kg/m^3
 Tinf = 773  # ambient temp, K
 
-# Kinetic parameters from Chan 1985 and Blasi 1993b
+# Kinetic parameters from Chan 1985, Liden 1988, Blasi 1993b
 #------------------------------------------------------------------------------
 
 # A = pre-exponential factor, 1/s and E = activation energy, kJ/mol
@@ -82,6 +84,7 @@ for i in range(1, p):
 py.rcParams['xtick.major.pad'] = 8
 py.rcParams['ytick.major.pad'] = 8
 py.rcParams['lines.linewidth'] = 2
+py.rcParams['axes.grid'] = True
 
 py.figure(1)
 py.plot(t, pw, label='wood')
@@ -89,8 +92,7 @@ py.plot(t, pg, label='gas')
 py.plot(t, pt, label='tar')
 py.plot(t, pc, label='char')
 py.legend(loc='best', numpoints=1)
-py.title('Reactions at T = %.f K' % Tinf)
+py.title('Analytical Solution, reactions at T = %.f K' % Tinf)
 py.xlabel('Time (s)')
 py.ylabel('Concentration ($kg/m^3$)')
-py.grid()
 py.show()

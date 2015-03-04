@@ -1,13 +1,13 @@
 """
-Function based on Font 1990 kinetic reaction scheme for biomass pyrolysis. 
-Reactions evaluated at some temperature.
+Functions based on Blasi 1993 kinetic reaction scheme for biomass pyrolysis. 
+Reactions are evaluated at some temperature.
 
 Functions:
-font1 - fluidized bed kinetics
-font2 - pyroprobe kinetics
+blasi1 - primary reactions only
+blasi2 - primary and secondary reactions
 
 Reference:
-Font, Marcilla, Verdu, Devesa, 1990. Ind. Eng. Chem. Res., 29, pp.1846-1855.
+Blasi, 1993. Combustion Science and Technology, 90, pp.315–340.
 """
 
 # Modules
@@ -18,9 +18,9 @@ import numpy as np
 # Function
 # -----------------------------------------------------------------------------
 
-def font1(T, pw, pg, pt, pc, dt, i):
+def blasi1(T, pw, pg, pt, pc, dt, i):
     """
-    Fluidized bed kinetic reactions.
+    Primary kinetic reactions from Table 1.
     INPUTS:
     T = temperature, K
     pw = wood concentration, kg/m^3
@@ -39,9 +39,9 @@ def font1(T, pw, pg, pt, pc, dt, i):
     R = 0.008314 # universal gas constant, kJ/mol*K
     
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
-    A1 = 6.80e8;    E1 = 155.6      # wood -> gas
-    A2 = 8.23e8;    E2 = 148.5      # wood -> tar
-    A3 = 2.91e2;    E3 = 61.4       # wood -> char
+    A1 = 5.16e6;     E1 = 88.6     # wood -> gas
+    A2 = 1.48e10;    E2 = 112.7    # wood -> tar
+    A3 = 2.66e10;    E3 = 106.5    # wood -> char
     
     # reaction rate constant for each reaction, 1/s
     K1 = A1 * np.exp(-E1 / (R * T))  # wood -> gas
@@ -54,22 +54,22 @@ def font1(T, pw, pg, pt, pc, dt, i):
     rwt = K2 * pw[i-1]              # wood -> tar rate
     rwc = K3 * pw[i-1]              # wood -> char rate
     
-    # wood, char, gas concentrations as a density, kg/m^3
+    # wood, gas, tar, char concentrations as a density, kg/m^3
     pww = pw[i-1] + rww*dt          # wood
     pgg = pg[i-1] + rwg*dt          # gas
     ptt = pt[i-1] + rwt*dt          # tar
     pcc = pc[i-1] + rwc*dt          # char
     
-    # return the wood, char, gas, tar concentrations as a density, kg/m^3
+    # return the wood, gas, tar, char concentrations as a density, kg/m^3
     return pww, pgg, ptt, pcc
 
 
 # Function
 # -----------------------------------------------------------------------------
 
-def font2(T, pw, pg, pt, pc, dt, i):
+def blasi2(T, pw, pg, pt, pc, dt, i):
     """
-    Pyroprobe kinetic reactions.
+    Primary and secondary reations from Table 1.
     INPUTS:
     T = temperature, K
     pw = wood concentration, kg/m^3
@@ -88,27 +88,33 @@ def font2(T, pw, pg, pt, pc, dt, i):
     R = 0.008314 # universal gas constant, kJ/mol*K
     
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
-    A1 = 1.52e7;    E1 = 139.3      # wood -> gas
-    A2 = 5.85e6;    E2 = 119        # wood -> tar
-    A3 = 2.98e3;    E3 = 73.4       # wood -> char
-    
+    A1 = 5.16e6;     E1 = 88.6     # wood -> gas
+    A2 = 1.48e10;    E2 = 112.7    # wood -> tar
+    A3 = 2.66e10;    E3 = 106.5    # wood -> char
+    A4 = 4.28e6;     E4 = 108      # tar -> gas
+    A5 = 1.0e6;      E5 = 108      # tar -> char
+
     # reaction rate constant for each reaction, 1/s
     K1 = A1 * np.exp(-E1 / (R * T))  # wood -> gas
     K2 = A2 * np.exp(-E2 / (R * T))  # wood -> tar
     K3 = A3 * np.exp(-E3 / (R * T))  # wood -> char
-    
+    K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
+    K5 = A5 * np.exp(-E5 / (R * T))  # tar -> char
+
     # reaction rate for each reaction, rho/s
     rww = -(K1+K2+K3) * pw[i-1]     # wood rate
     rwg = K1 * pw[i-1]              # wood -> gas rate
     rwt = K2 * pw[i-1]              # wood -> tar rate
     rwc = K3 * pw[i-1]              # wood -> char rate
+    rtg = K4 * pt[i-1]              # tar -> gas
+    rtc = K5 * pt[i-1]              # tar -> char
     
-    # wood, char, gas concentrations as a density, kg/m^3
-    pww = pw[i-1] + rww*dt          # wood
-    pgg = pg[i-1] + rwg*dt          # gas
-    ptt = pt[i-1] + rwt*dt          # tar
-    pcc = pc[i-1] + rwc*dt          # char
+    # wood, gas, tar, char concentrations as a density, kg/m^3
+    pww = pw[i-1] + rww*dt              # wood
+    pgg = pg[i-1] + (rwg+rtg)*dt        # gas
+    ptt = pt[i-1] + (rwt-rtg-rtc)*dt    # tar
+    pcc = pc[i-1] + (rwc+rtc)*dt        # char
     
-    # return the wood, char, gas, tar concentrations as a density, kg/m^3
+    # return the wood, gas, tar, char concentrations as a density, kg/m^3
     return pww, pgg, ptt, pcc
     
