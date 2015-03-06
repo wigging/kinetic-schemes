@@ -15,12 +15,12 @@ Font, Marcilla, Verdu, Devesa, 1990. Ind. Eng. Chem. Res., 29, pp.1846-1855.
 
 import numpy as np
 
-# Function
+# Function - primary reactions from fluidized bed
 # -----------------------------------------------------------------------------
 
 def font1(T, pw, pg, pt, pc, dt, i):
     """
-    Fluidized bed kinetic reactions.
+    Fluidized bed primary kinetic reactions.
     INPUTS:
     T = temperature, K
     pw = wood concentration, kg/m^3
@@ -39,9 +39,9 @@ def font1(T, pw, pg, pt, pc, dt, i):
     R = 0.008314 # universal gas constant, kJ/mol*K
     
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
-    A1 = 6.80e8;    E1 = 155.6      # wood -> gas
-    A2 = 8.23e8;    E2 = 148.5      # wood -> tar
-    A3 = 2.91e2;    E3 = 61.4       # wood -> char
+    A1 = 6.80e8;    E1 = 156      # wood -> gas
+    A2 = 8.23e8;    E2 = 148      # wood -> tar
+    A3 = 2.91e2;    E3 = 61       # wood -> char
     
     # reaction rate constant for each reaction, 1/s
     K1 = A1 * np.exp(-E1 / (R * T))  # wood -> gas
@@ -64,12 +64,12 @@ def font1(T, pw, pg, pt, pc, dt, i):
     return pww, pgg, ptt, pcc
 
 
-# Function
+# Function - primary reactions from pyroprobe 100
 # -----------------------------------------------------------------------------
 
 def font2(T, pw, pg, pt, pc, dt, i):
     """
-    Pyroprobe kinetic reactions.
+    Pyroprobe primary kinetic reactions.
     INPUTS:
     T = temperature, K
     pw = wood concentration, kg/m^3
@@ -88,9 +88,9 @@ def font2(T, pw, pg, pt, pc, dt, i):
     R = 0.008314 # universal gas constant, kJ/mol*K
     
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
-    A1 = 1.52e7;    E1 = 139.3      # wood -> gas
-    A2 = 5.85e6;    E2 = 119        # wood -> tar
-    A3 = 2.98e3;    E3 = 73.4       # wood -> char
+    A1 = 1.52e7;    E1 = 139      # wood -> gas
+    A2 = 5.85e6;    E2 = 119      # wood -> tar
+    A3 = 2.98e3;    E3 = 73       # wood -> char
     
     # reaction rate constant for each reaction, 1/s
     K1 = A1 * np.exp(-E1 / (R * T))  # wood -> gas

@@ -66,7 +66,7 @@ def papadikis1(T, pw, pg, pt, pc, dt, i):
     # return the wood, gas, tar, char concentrations as a density, kg/m^3
     return pww, pgg, ptt, pcc
 
-# Function - primary and secondary reations with Liden 1988 (4) and Blasi 1993 (5)
+# Function - primary & secondary reations with Liden 1988 (4) and Blasi 1993 (5)
 # -----------------------------------------------------------------------------
 
 def papadikis2(T, pw, pg, pt, pc, dt, i):
