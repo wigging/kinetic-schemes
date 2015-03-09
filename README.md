@@ -3,13 +3,27 @@ Various kinetic schemes are available to predict the devolatilization of biomass
 
 *Requirements: Python 3, NumPy, and Matplotlib*
 
-### funcChanBlasi.py
-Kinetic functions based on Chan 1985 and Blasi 1993b kinetic reaction scheme for biomass pyrolysis. Primary and secondary reactions evaluated at some temperature. Separate function also provided just for primary reactions.
+### approach_1.py, approach_2.py, approach_3.py, approach_4.py
+
+### funcBlasi.py
+
+### funcChan.py
+
+### funcFont.py
+
+### funcJanse.py
+
+### funcPapadikis.py
+
+### funcThurner.py
 
 ### References
-* Chan, W.C.R., Kelbon, M. & Krieger, B.B., 1985. Modelling and experimental verification of physical and chemical processes during pyrolysis of a large biomass particle. Fuel, 64(11), pp.1505–1513.
-* list
-* list
+* Di Blasi, C. (1993). Analysis of convection and secondary reaction effects within porous solid fuels undergoing pyrolysis. Combustion Science and Technology, 90(5-6), 315-340.
+* Chan, W.C.R., Kelbon, M., & Krieger, B.B. (1985). Modelling and experimental verification of physical and chemical processes during pyrolysis of a large biomass particle. Fuel, 64(11), 1505-1513.
+* Font, R., Marcilla, A., Verdu, E., & Devesa, J. (1990). Analysis of convection and secondary reaction effects within porous solid fuels undergoing pyrolysis. Ind. Eng. Chem. Res, 29, 1846-1855.
+* Janse, A.M.C., Westerhout, R.W.J., & Prins, W. (2000). Modelling of flash pyrolysis of a single wood particle. Chemical Engineering and Processing: Process Intensification, 39(3), 239-252.
+* Papadikis, K., Gu, S., & Bridgwater, A.V. (2010). Computational modelling of the impact of particle size to the heat transfer coefficient between biomass particles and a fluidised bed. Fuel Processing Technology, 91(1), 68-79.
+* Thurner, F. & Mann, U., (1981). Kinetic Investigation of Wood Pyrolysis. Industrial and Engineering Chemistry Process Design and Development, 20, 482–488.
 
 ### License
 Files in this repository are available under the MIT license. See the LICENSE file for more info.
