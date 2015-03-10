@@ -1,21 +1,35 @@
 ## Kinetic Reactions for Biomass Pyrolysis
-Various kinetic schemes are available to predict the devolatilization of biomass to gas, tar, and char products. The function files (`func_.py`) listed below are based on a particular kinetic scheme. Each function returns the product yield applicable to a particular scheme. See the comments in each file for more details. Different approaches of solving the system of kinetic reactions are also investigated in the `approach_.py` files.
+Various kinetic schemes are available to predict the devolatilization of biomass to gas, tar, and char products. The function files,`func_.py`, listed below are based on a particular kinetic scheme. Concentrations are on a volume basis represented as a density (kg/m<sup>3</sup>). Each function returns the product yield applicable to a particular scheme. See the comments in each file for more details.
 
 *Requirements: Python 3, NumPy, and Matplotlib*
 
-### approach_1.py, approach_2.py, approach_3.py, approach_4.py
+### approach.py
+
+The `approach` files demonstrate different techniques in Python for solving a system of kinetic reactions for biomass pyrolysis. `approach_1.py` uses the analytical solution of the wood concentration as a function of time. `approach_2.py`  is an Euler method based on the initial wood concentration and reaction rates. `approach_3.py` uses the SciPy odeint to solve a system kinetic reactions as ODEs. `approach_4.py` uses the SciPy ode solver for a system of ODEs using techniques such as the Runge-Kutta method.
 
 ### funcBlasi.py
 
+Contains functions based on the Blasi 1993 kinetic reaction scheme. The `blasi1` function returns the products for the primary reactions only. The `blasi2` function returns the primary and secondary reaction products.
+
 ### funcChan.py
+
+Several functions based on the Chan 1985 kinetic reaction scheme. The `chan1` function returns only the products from the primary reactions. The `chan2` function returns the primary reaction products neglecting the moisture content to water vapor reaction. The `chan3` function returns the primary and secondary reaction products. The `chan4` function returns the primary and secondary reaction products without the moisture content reaction.
 
 ### funcFont.py
 
+Two functions based on the Font 1990 kinetic scheme. The `font1` function represents the kinetic reactions developed from a fluidized bed experiment. The `font2` function represents the kinetic reactions developed from a pyroprobe experiment. The functions provide a comparison of how different experimental techniques affect the kinetic parameters.
+
 ### funcJanse.py
+
+Functions based on the Janse 2000 kinetic reaction scheme. The `janse1` function returns the products for the primary reacions only. The `janse2` function returns the products for the primary and secondary reactions.
 
 ### funcPapadikis.py
 
+Functions based on the Papadikis 2010 kinetic scheme. The `papadikis1` function returns the products for the primary reacions only. The `papadikis2` function returns the products for the primary and secondary reactions.
+
 ### funcThurner.py
+
+A function based on the Thurner 1981 kinetic reaction scheme that returns the products from the primary reactions.
 
 ### References
 * Di Blasi, C. (1993). Analysis of convection and secondary reaction effects within porous solid fuels undergoing pyrolysis. Combustion Science and Technology, 90(5-6), 315-340.
