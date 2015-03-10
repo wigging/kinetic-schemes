@@ -1,9 +1,9 @@
 """
-Function based on Thurner and Mann 1981 kinetic reaction scheme for biomass
-pyrolysis. Primary reactions evaluated at some temperature.
+Function based on Thurner 1981 kinetic reaction scheme for biomass pyrolysis. 
+Primary reactions evaluated at some temperature.
 
 Reference:
-Thurner and Mann 1981
+Thurner, Mann, 1981. Ind. Eng. Chem. Process Des. Dev., 20, pp.482-488.
 """
 
 # Modules
@@ -11,7 +11,7 @@ Thurner and Mann 1981
 
 import numpy as np
 
-# Function
+# Function - primary kinetic reactions
 # -----------------------------------------------------------------------------
 
 def thurner(T, pw, pg, pt, pc, dt, i):

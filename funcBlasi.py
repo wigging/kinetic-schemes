@@ -15,7 +15,7 @@ Blasi, 1993. Combustion Science and Technology, 90, pp.315–340.
 
 import numpy as np
 
-# Function
+# Function - primary kinetic reactions from Table 1
 # -----------------------------------------------------------------------------
 
 def blasi1(T, pw, pg, pt, pc, dt, i):
@@ -64,7 +64,7 @@ def blasi1(T, pw, pg, pt, pc, dt, i):
     return pww, pgg, ptt, pcc
 
 
-# Function
+# Function - primary and secondary reactions from Table 1
 # -----------------------------------------------------------------------------
 
 def blasi2(T, pw, pg, pt, pc, dt, i):
