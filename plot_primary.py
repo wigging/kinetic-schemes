@@ -26,6 +26,7 @@ import funcChan as kn0
 import funcFont as kn1
 import funcJanse as kn2
 import funcThurner as kn3
+import funcBlasiBranca as kn4
 
 # Parameters from Papadikis 2010a
 #------------------------------------------------------------------------------
@@ -47,12 +48,12 @@ p = len(t)                              # total number of time steps
 # arrays for wood, gas, tar, char concentrations as a density, kg/m^3
 # row = concentration for a particular kinetic scheme
 # column = time step
-pw = np.zeros([5, len(t)])   # wood array
-pg = np.zeros([5, len(t)])   # gas array
-pt = np.zeros([5, len(t)])   # tar array
-pc = np.zeros([5, len(t)])   # char array
+pw = np.zeros([6, len(t)])   # wood array
+pg = np.zeros([6, len(t)])   # gas array
+pt = np.zeros([6, len(t)])   # tar array
+pc = np.zeros([6, len(t)])   # char array
 
-pw[:] = rhow # initial wood density
+pw[:] = rhow         # initial wood density
 
 # assign kinetic scheme to a particular row
 pw0 = pw[0]; pc0 = pc[0]; pg0 = pg[0]; pt0 = pt[0]  # Chan kinetic scheme
@@ -60,6 +61,7 @@ pw1 = pw[1]; pc1 = pc[1]; pg1 = pg[1]; pt1 = pt[1]  # Font scheme (fluidized bed
 pw2 = pw[2]; pc2 = pc[2]; pg2 = pg[2]; pt2 = pt[2]  # Font scheme (pyroprobe)
 pw3 = pw[3]; pc3 = pc[3]; pg3 = pg[3]; pt3 = pt[3]  # Janse kinetic scheme
 pw4 = pw[4]; pc4 = pc[4]; pg4 = pg[4]; pt4 = pt[4]  # Thurner kinetic scheme
+pw5 = pw[5]; pc5 = pc[5]; pg5 = pg[5]; pt5 = pt[5]  # Blasi, Branca scheme
 
 # assign kinetic scheme to a particular row
 
@@ -70,6 +72,7 @@ for i in range(1, p):
     pw[2,i], pg[2,i], pt[2,i], pc[2,i] = kn1.font2(Tinf, pw2, pg2, pt2, pc2, dt, i)
     pw[3,i], pg[3,i], pt[3,i], pc[3,i] = kn2.janse1(Tinf, pw3, pg3, pt3, pc3, dt, i)
     pw[4,i], pg[4,i], pt[4,i], pc[4,i] = kn3.thurner(Tinf, pw4, pg4, pt4, pc4, dt, i)
+    pw[5,i], pg[5,i], pt[5,i], pc[5,i] = kn4.blasibranca(Tinf, pw5, pg5, pt5, pc5, dt, i)
 
 # convert concentrations to percent
 wood = pw/rhow*100
@@ -91,6 +94,7 @@ py.plot(t, wood[1], label='Font 1990 (fb)')
 py.plot(t, wood[2], label='Font 1990 (pp)')
 py.plot(t, wood[3], label='Janse 2000')
 py.plot(t, wood[4], label='Thurner 1981')
+py.plot(t, wood[5], label='Blasi 2001')
 py.title('Wood Conversion, primary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
 py.ylabel('Wood Conversion (% Dry Basis)')
@@ -103,6 +107,7 @@ py.plot(t, tar[1], label='Font 1990 (fb)')
 py.plot(t, tar[2], label='Font 1990 (pp)')
 py.plot(t, tar[3], label='Janse 2000')
 py.plot(t, tar[4], label='Thurner 1981')
+py.plot(t, tar[5], label='Blasi 2001')
 py.title('Tar Yield, primary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
 py.ylabel('Tar Yield (% Dry Basis)')

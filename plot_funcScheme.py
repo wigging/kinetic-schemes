@@ -1,5 +1,6 @@
 """
-Plot primary and secondary kinetic reactions for biomass pyrolysis.
+Plot primary and secondary kinetic reactions of biomass pyrolysis for the 
+functional group (wood, gas, tar, char) kinetic schemes.
 """
 
 # Modules

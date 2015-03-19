@@ -69,23 +69,18 @@ def papadikis1(T, pw, pg, pt, pc, dt, i):
 # Function - primary & secondary reations with Liden 1988 (4) and Blasi 1993 (5)
 # -----------------------------------------------------------------------------
 
-def papadikis2(T, pw, pg, pt, pc, dt, i):
+def papadikis2(T, pw, dt, p):
     """
-    Primary and secondary reations with Liden 1988 (4) and Blasi 1993 (5).
-    INPUTS:
     T = temperature, K
-    pw = wood concentration, kg/m^3
-    pg = gas concentration, kg/m^3
-    pt = tar concentration, kg/m^3
-    pc = char concentration, kg/m^3
-    dt = delta time, s
-    i = index    
-    OUTPUTS:
-    pww = wood
-    pgg = gas
-    ptt = tar
-    pcc = char
+    pw = vector of initial wood concentration, kg/m^3
+    dt = time step, s
+    p = total number of time steps
     """
+    
+    # vectors to store product concentrations, kg/m^3
+    pg = np.zeros(p)    # gas
+    pt = np.zeros(p)    # tar
+    pc = np.zeros(p)    # char
     
     R = 0.008314 # universal gas constant, kJ/mol*K
     
@@ -103,20 +98,19 @@ def papadikis2(T, pw, pg, pt, pc, dt, i):
     K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
     K5 = A5 * np.exp(-E5 / (R * T))  # tar -> char
     
-    # reaction rate for each reaction, rho/s
-    rww = -(K1+K2+K3) * pw[i-1]     # wood rate
-    rwg = K1 * pw[i-1]              # wood -> gas rate
-    rwt = K2 * pw[i-1]              # wood -> tar rate
-    rwc = K3 * pw[i-1]              # wood -> char rate
-    rtg = K4 * pt[i-1]              # tar -> gas rate
-    rtc = K5 * pt[i-1]              # tar -> char rate
-    
-    # wood, char, gas concentrations as a density, kg/m^3
-    pww = pw[i-1] + rww*dt                  # wood
-    pgg = pg[i-1] + (rwg + rtg)*dt          # gas
-    ptt = pt[i-1] + (rwt - rtg - rtc)*dt    # tar
-    pcc = pc[i-1] + (rwc + rtc)*dt          # char
+    # calculate concentrations for each product, kg/m^3
+    for i in range(1, p):
+        rww = -(K1+K2+K3) * pw[i-1]     # wood rate
+        rwg = K1 * pw[i-1]              # wood -> gas rate
+        rwt = K2 * pw[i-1]              # wood -> tar rate
+        rwc = K3 * pw[i-1]              # wood -> char rate
+        rtg = K4 * pt[i-1]              # tar -> gas rate
+        rtc = K5 * pt[i-1]              # tar -> char rate
+        pw[i] = pw[i-1] + rww*dt                  # wood
+        pg[i] = pg[i-1] + (rwg + rtg)*dt          # gas
+        pt[i] = pt[i-1] + (rwt - rtg - rtc)*dt    # tar
+        pc[i] = pc[i-1] + (rwc + rtc)*dt          # char
     
     # return the wood, gas, tar, char concentrations as a density, kg/m^3
-    return pww, pgg, ptt, pcc
+    return pw, pg, pt, pc
 
