@@ -11,22 +11,25 @@ import numpy as np
 # Function for cellulose reactions
 # -----------------------------------------------------------------------------
 
-def cell(T, pw, dt, p):
+def cell(rhow, T, dt, nt):
     """
+    rhow = wood density, kg/m^3
     T = temperature, K
-    pw = vector of initial wood concentration, kg/m^3
     dt = time step, s
-    p = total number of time steps
+    nt = total number of time steps
     """
+    
+    # vector for initial wood concentration, kg/m^3
+    pw = np.ones(nt)*rhow
     
     # vector of initial cellulose concentration for beech wood, Table 2, kg/m^3
     cell = pw*0.48  # cellulose
     
     # vectors to store product concentrations, kg/m^3
-    cella = np.zeros(p)     # active cellulose
-    gas = np.zeros(p)       # gas
-    tar = np.zeros(p)       # tar
-    char = np.zeros(p)      # char
+    cella = np.zeros(nt)     # active cellulose
+    gas = np.zeros(nt)       # gas
+    tar = np.zeros(nt)       # tar
+    char = np.zeros(nt)      # char
     
     R = 0.008314    # universal gas constant, kJ/mol*K
     x = 0.35        # char formation mass ratio for cellulose
@@ -44,7 +47,9 @@ def cell(T, pw, dt, p):
     K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
     
     # calculate concentrations for each product, kg/m^3
-    for i in range(1, p):
+    # reaction rate as r, rho/s
+    # concentration as density p, kg/m^3
+    for i in range(1, nt):
         r1 = K1 * cell[i-1]     # cell -> cella
         r2 = K2 * cella[i-1]    # cella -> tar
         r3 = K3 * cella[i-1]    # cella -> x*char + (1-x)*gas
@@ -62,22 +67,25 @@ def cell(T, pw, dt, p):
 # Function for hemicellulose reactions
 # -----------------------------------------------------------------------------
 
-def hemi(T, pw, dt, p):
+def hemi(rhow, T, dt, nt):
     """
+    rhow = wood density, kg/m^3
     T = temperature, K
-    pw = vector of initial wood concentration, kg/m^3
     dt = time step, s
-    p = total number of time steps
+    nt = total number of time steps
     """
+    
+    # vector for initial wood concentration, kg/m^3
+    pw = np.ones(nt)*rhow
     
     # vector of initial hemicellulose concentration for beech wood, see Table 2
     hemi = pw*0.28  # hemicellulose, kg/m^3
     
     # vectors to store product concentrations, kg/m^3
-    hemia = np.zeros(p)     # active hemicellulose
-    gas = np.zeros(p)       # gas
-    tar = np.zeros(p)       # tar
-    char = np.zeros(p)      # char
+    hemia = np.zeros(nt)     # active hemicellulose
+    gas = np.zeros(nt)       # gas
+    tar = np.zeros(nt)       # tar
+    char = np.zeros(nt)      # char
     
     R = 0.008314    # universal gas constant, kJ/mol*K
     x = 0.60        # char formation mass ratio for cellulose
@@ -95,7 +103,9 @@ def hemi(T, pw, dt, p):
     K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
     
     # calculate concentrations for each product, kg/m^3
-    for i in range(1, p):
+    # reaction rate as r, rho/s
+    # concentration as density p, kg/m^3
+    for i in range(1, nt):
         r1 = K1 * hemi[i-1]     # hemi -> hemia
         r2 = K2 * hemia[i-1]    # hemia -> tar
         r3 = K3 * hemia[i-1]    # hemia -> x*char + (1-x)*gas
@@ -113,22 +123,25 @@ def hemi(T, pw, dt, p):
 # Function for lignin reactions
 # -----------------------------------------------------------------------------
 
-def lig(T, pw, dt, p):
+def lig(rhow, T, dt, nt):
     """
+    rhow = wood density, kg/m^3
     T = temperature, K
-    pw = vector of initial wood concentration, kg/m^3
     dt = time step, s
-    p = total number of time steps
+    nt = total number of time steps
     """
+    
+    # vector for initial wood concentration, kg/m^3
+    pw = np.ones(nt)*rhow
     
     # vector of initial lignin concentration for beech wood, see Table 2
     lig = pw*0.24  # hemicellulose, kg/m^3
     
     # vectors to store product concentrations, kg/m^3
-    liga = np.zeros(p)      # active lignin
-    gas = np.zeros(p)       # gas
-    tar = np.zeros(p)       # tar
-    char = np.zeros(p)      # char
+    liga = np.zeros(nt)      # active lignin
+    gas = np.zeros(nt)       # gas
+    tar = np.zeros(nt)       # tar
+    char = np.zeros(nt)      # char
     
     R = 0.008314    # universal gas constant, kJ/mol*K
     x = 0.75        # char formation mass ratio for cellulose
@@ -146,7 +159,9 @@ def lig(T, pw, dt, p):
     K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
     
     # calculate concentrations for each product, kg/m^3
-    for i in range(1, p):
+    # reaction rate as r, rho/s
+    # concentration as density p, kg/m^3
+    for i in range(1, nt):
         r1 = K1 * lig[i-1]     # lig -> liga
         r2 = K2 * liga[i-1]    # liga -> tar
         r3 = K3 * liga[i-1]    # liga -> x*char + (1-x)*gas

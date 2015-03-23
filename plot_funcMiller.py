@@ -37,8 +37,8 @@ phemi, phemia, pgas2, ptar2, pchar2 = kn.hemi(Tinf, pw, dt, p)
 plig, pliga, pgas3, ptar3, pchar3 = kn.lig(Tinf, pw, dt, p)
 
 # sum components to wood, gas, tar, char groups, kg/m^3
-pwood = pcell + phemi + plig
 pactive = pcella + phemia + pliga
+pwood = pcell + phemi + plig
 pgas = pgas1 + pgas2 + pgas3
 ptar = ptar1 + ptar2 + ptar3
 pchar = pchar1 + pchar2 + pchar3

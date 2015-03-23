@@ -21,23 +21,21 @@ import numpy as np
 # Function - primary kinetic reactions from Chan 1985 (1-3)
 # -----------------------------------------------------------------------------
 
-def papadikis1(T, pw, pg, pt, pc, dt, i):
+def papadikis1(rhow, T, dt, nt):
     """
-    Primary kinetic reactions from Chan 1985 (1-3).
-    INPUTS:
+    rhow = wood density, kg/m^3
     T = temperature, K
-    pw = wood concentration, kg/m^3
-    pg = gas concentration, kg/m^3
-    pt = tar concentration, kg/m^3
-    pc = char concentration, kg/m^3
-    dt = delta time, s
-    i = index    
-    OUTPUTS:
-    pww = wood
-    pgg = gas
-    ptt = tar
-    pcc = char
+    dt = time step, s
+    nt = total number of time steps
     """
+    
+    # vector for initial wood concentration, kg/m^3
+    pw = np.ones(nt)*rhow
+    
+    # vectors to store product concentrations, kg/m^3
+    pg = np.zeros(nt)    # gas
+    pt = np.zeros(nt)    # tar
+    pc = np.zeros(nt)    # char
     
     R = 0.008314 # universal gas constant, kJ/mol*K
     
@@ -51,36 +49,41 @@ def papadikis1(T, pw, pg, pt, pc, dt, i):
     K2 = A2 * np.exp(-E2 / (R * T))  # wood -> tar
     K3 = A3 * np.exp(-E3 / (R * T))  # wood -> char
     
-    # reaction rate for each reaction, rho/s
-    rww = -(K1+K2+K3) * pw[i-1]     # wood rate
-    rwg = K1 * pw[i-1]              # wood -> gas rate
-    rwt = K2 * pw[i-1]              # wood -> tar rate
-    rwc = K3 * pw[i-1]              # wood -> char rate
-    
-    # wood, char, gas concentrations as a density, kg/m^3
-    pww = pw[i-1] + rww*dt          # wood
-    pgg = pg[i-1] + rwg*dt          # gas
-    ptt = pt[i-1] + rwt*dt          # tar
-    pcc = pc[i-1] + rwc*dt          # char
+    # concentrations at each time step for each product, kg/m^3
+    # reaction rate as r, rho/s
+    # concentration as density p, kg/m^3
+    for i in range(1, nt):
+        rww = -(K1+K2+K3) * pw[i-1]     # wood rate
+        rwg = K1 * pw[i-1]              # wood -> gas rate
+        rwt = K2 * pw[i-1]              # wood -> tar rate
+        rwc = K3 * pw[i-1]              # wood -> char rate
+        pw[i] = pw[i-1] + rww*dt        # wood
+        pg[i] = pg[i-1] + rwg*dt        # gas
+        pt[i] = pt[i-1] + rwt*dt        # tar
+        pc[i] = pc[i-1] + rwc*dt        # char
     
     # return the wood, gas, tar, char concentrations as a density, kg/m^3
-    return pww, pgg, ptt, pcc
-
+    return pw, pg, pt, pc
+    
+    
 # Function - primary & secondary reations with Liden 1988 (4) and Blasi 1993 (5)
 # -----------------------------------------------------------------------------
 
-def papadikis2(T, pw, dt, p):
+def papadikis2(rhow, T, dt, nt):
     """
+    rhow = wood density, kg/m^3
     T = temperature, K
-    pw = vector of initial wood concentration, kg/m^3
     dt = time step, s
-    p = total number of time steps
+    nt = total number of time steps
     """
     
+    # vector for initial wood concentration, kg/m^3
+    pw = np.ones(nt)*rhow
+    
     # vectors to store product concentrations, kg/m^3
-    pg = np.zeros(p)    # gas
-    pt = np.zeros(p)    # tar
-    pc = np.zeros(p)    # char
+    pg = np.zeros(nt)    # gas
+    pt = np.zeros(nt)    # tar
+    pc = np.zeros(nt)    # char
     
     R = 0.008314 # universal gas constant, kJ/mol*K
     
@@ -98,8 +101,10 @@ def papadikis2(T, pw, dt, p):
     K4 = A4 * np.exp(-E4 / (R * T))  # tar -> gas
     K5 = A5 * np.exp(-E5 / (R * T))  # tar -> char
     
-    # calculate concentrations for each product, kg/m^3
-    for i in range(1, p):
+    # concentrations at each time step for each product, kg/m^3
+    # reaction rate as r, rho/s
+    # concentration as density p, kg/m^3
+    for i in range(1, nt):
         rww = -(K1+K2+K3) * pw[i-1]     # wood rate
         rwg = K1 * pw[i-1]              # wood -> gas rate
         rwt = K2 * pw[i-1]              # wood -> tar rate

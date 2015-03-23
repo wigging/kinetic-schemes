@@ -5,6 +5,7 @@ Reactions are provided by the kinetic scheme in a separate function file.
 Function Files:
 funcPapadikis.py
 funcJanse.py
+funcMiller.py
 
 Requirements:
 Python 3, Numpy, Matplotlib
@@ -33,48 +34,39 @@ Tinf = 773  # ambient temp, K
 # Initial Calculations
 #------------------------------------------------------------------------------
 
-dt = 0.0001                               # time step, delta t
+dt = 0.0001                             # time step, delta t
 tmax = 25                               # max time, s
 t = np.linspace(0, tmax, num=tmax/dt)   # time vector
-p = len(t)                              # total number of time steps
+nt = len(t)                             # total number of time steps
 
 # Calculate Kinetic Reactions and Concentrations - Groups
 #------------------------------------------------------------------------------
 
-# arrays for wood, gas, tar, char concentrations as a density, kg/m^3
-# row = concentration for a particular kinetic scheme
-# column = time step
-pw = np.zeros([3, p])   # wood array
-pg = np.zeros([3, p])   # gas array
-pt = np.zeros([3, p])   # tar array
-pc = np.zeros([3, p])   # char array
-
-pw[:] = rhow # initial wood density
-
-# kinetics for primary & secondary reactions - groups
-pw[0], pg[0], pt[0], pc[0] = kn0.papadikis2(Tinf, pw[0], dt, p)
-pw[1], pg[1], pt[1], pc[1] = kn1.janse2(Tinf, pw[1], dt, p)
+# kinetics for product concentrations as a density, kg/m^3
+pw0, pg0, pt0, pc0 = kn0.papadikis2(rhow, Tinf, dt, nt)
+pw1, pg1, pt1, pc1 = kn1.janse2(rhow, Tinf, dt, nt)
 
 # Calculate Kinetic Reactions and Concentrations - Cell, Hemi, Lig
 #------------------------------------------------------------------------------
 
-# array of product concentrations as a density, kg/m^3
-pcell, pcella, pgas1, ptar1, pchar1 = kn2.cell(Tinf, pw[2], dt, p)
-phemi, phemia, pgas2, ptar2, pchar2 = kn2.hemi(Tinf, pw[2], dt, p)
-plig, pliga, pgas3, ptar3, pchar3 = kn2.lig(Tinf, pw[2], dt, p)
+# kinetics for product concentrations as a density, kg/m^3
+pcell, pcella, pgas1, ptar1, pchar1 = kn2.cell(rhow, Tinf, dt, nt)
+phemi, phemia, pgas2, ptar2, pchar2 = kn2.hemi(rhow, Tinf, dt, nt)
+plig, pliga, pgas3, ptar3, pchar3 = kn2.lig(rhow, Tinf, dt, nt)
 
 # sum components to wood, gas, tar, char groups, kg/m^3
-pw[2] = pcell + phemi + plig
 pactive = pcella + phemia + pliga
-pg[2] = pgas1 + pgas2 + pgas3
-pt[2] = ptar1 + ptar2 + ptar3
-pc[2] = pchar1 + pchar2 + pchar3
+pw2 = pcell + phemi + plig + pactive
+pg2 = pgas1 + pgas2 + pgas3
+pt2 = ptar1 + ptar2 + ptar3
+pc2 = pchar1 + pchar2 + pchar3
 
-# convert concentrations to percent
-wood = pw/rhow*100
-gas = pg/rhow*100
-tar = pt/rhow*100
-char = pc/rhow*100
+# Convert concentrations to mass fraction for each scheme
+#------------------------------------------------------------------------------
+
+wood0 = pw0/rhow;   gas0 = pg0/rhow;    tar0 = pt0/rhow;    char0 = pc0/rhow
+wood1 = pw1/rhow;   gas1 = pg1/rhow;    tar1 = pt1/rhow;    char1 = pc1/rhow
+wood2 = pw2/rhow;   gas2 = pg2/rhow;    tar2 = pt2/rhow;    char2 = pc2/rhow
 
 # Plot Results
 #------------------------------------------------------------------------------
@@ -85,21 +77,21 @@ py.rcParams['lines.linewidth'] = 2
 py.rcParams['axes.grid'] = True
 
 py.figure(3)
-py.plot(t, wood[0], label='Papadikis 2010')
-py.plot(t, wood[1], label='Janse 2000')
-py.plot(t, wood[2], label='Miller 1997')
+py.plot(t, wood0, label='Papadikis 2010')
+py.plot(t, wood1, label='Janse 2000')
+py.plot(t, wood2, label='Miller 1997')
 py.title('Wood Conversion, primary & secondary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
-py.ylabel('Wood Conversion (% Dry Basis)')
+py.ylabel('Wood Mass Fraction (dry basis)')
 py.legend(loc='best', numpoints=1)
-py.show()
 
 py.figure(4)
-py.plot(t, tar[0], label='Papadikis 2010')
-py.plot(t, tar[1], label='Janse 2000')
-py.plot(t, tar[2], label='Miller 1997')
+py.plot(t, tar0, label='Papadikis 2010')
+py.plot(t, tar1, label='Janse 2000')
+py.plot(t, tar2, label='Miller 1997')
 py.title('Tar Yield, primary & secondary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
-py.ylabel('Tar Yield (% Dry Basis)')
+py.ylabel('Tar Mass Fraction (dry basis)')
 py.legend(loc='best', numpoints=1)
+
 py.show()
