@@ -61,7 +61,7 @@ pg2 = pgas1 + pgas2 + pgas3
 pt2 = ptar1 + ptar2 + ptar3
 pc2 = pchar1 + pchar2 + pchar3
 
-# Convert concentrations to mass fraction for each scheme
+# Convert concentrations to mass fraction for each scheme, (-)
 #------------------------------------------------------------------------------
 
 wood0 = pw0/rhow;   gas0 = pg0/rhow;    tar0 = pt0/rhow;    char0 = pc0/rhow

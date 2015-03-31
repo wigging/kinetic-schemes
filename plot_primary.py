@@ -53,7 +53,7 @@ pw3, pg3, pt3, pc3 = kn2.janse1(rhow, Tinf, dt, nt)
 pw4, pg4, pt4, pc4 = kn3.thurner(rhow, Tinf, dt, nt)
 pw5, pg5, pt5, pc5 = kn4.blasibranca(rhow, Tinf, dt, nt)
 
-# convert concentrations to mass fraction for each scheme
+# convert concentrations to mass fraction for each scheme, (-)
 wood0 = pw0/rhow;   gas0 = pg0/rhow;    tar0 = pt0/rhow;    char0 = pc0/rhow
 wood1 = pw1/rhow;   gas1 = pg1/rhow;    tar1 = pt1/rhow;    char1 = pc1/rhow
 wood2 = pw2/rhow;   gas2 = pg2/rhow;    tar2 = pt2/rhow;    char2 = pc2/rhow
