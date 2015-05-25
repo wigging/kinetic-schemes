@@ -72,9 +72,12 @@ wood2 = pw2/rhow;   gas2 = pg2/rhow;    tar2 = pt2/rhow;    char2 = pc2/rhow
 #------------------------------------------------------------------------------
 
 py.rcParams['xtick.major.pad'] = 8
+py.rcParams['xtick.major.size'] = 0
 py.rcParams['ytick.major.pad'] = 8
+py.rcParams['ytick.major.size'] = 0
 py.rcParams['lines.linewidth'] = 2
 py.rcParams['axes.grid'] = True
+py.rcParams['legend.framealpha'] = 0
 
 py.figure(3)
 py.plot(t, wood0, label='Papadikis 2010')
@@ -84,6 +87,8 @@ py.title('Wood Conversion, primary & secondary reactions at T = {} K'.format(Tin
 py.xlabel('Time (s)')
 py.ylabel('Wood Mass Fraction (dry basis)')
 py.legend(loc='best', numpoints=1)
+py.gca().spines['right'].set_visible(False)
+py.gca().spines['top'].set_visible(False)
 
 py.figure(4)
 py.plot(t, tar0, label='Papadikis 2010')
@@ -93,5 +98,7 @@ py.title('Tar Yield, primary & secondary reactions at T = {} K'.format(Tinf))
 py.xlabel('Time (s)')
 py.ylabel('Tar Mass Fraction (dry basis)')
 py.legend(loc='best', numpoints=1)
+py.gca().spines['right'].set_visible(False)
+py.gca().spines['top'].set_visible(False)
 
 py.show()
