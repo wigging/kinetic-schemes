@@ -1,81 +1,64 @@
 """
-Plot product yields from primary reactions of biomass pyrolysis. Reactions are 
-provided by the kinetic scheme in a separate function file.
-
-Function Files:
-funcChan.py
-funcFont.py
-funcThurner.py
-funcJanse.py
-
-Requirements:
-Python 3, Numpy, Matplotlib
+Plot wood conversion and tar yield as mass fraction of original wood. Only
+primary reactions from various kinetic pyrolysis schemes are considered.
 
 References:
-See comments in each function file.
+See comments in the function file for references to a particular kinetic scheme.
 """
-
-# Modules and Function Files
-#------------------------------------------------------------------------------
 
 import numpy as np
 import matplotlib.pyplot as py
-py.close('all')
-
-import funcChan as kn0
-import funcFont as kn1
-import funcJanse as kn2
-import funcThurner as kn3
-import funcBlasiBranca as kn4
-import funcRanzi as kn5
+import functions as fn
 
 # Parameters
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-rhow = 700  # density of wood, kg/m^3
-Tinf = 773  # ambient temp, K
+T = 773  # temperature for rate constants, K
+
+dt = 0.005                              # time step, delta t
+tmax = 25                               # max time, s
+t = np.linspace(0, tmax, num=tmax/dt)   # time vector
+nt = len(t)                             # total number of time steps
+
+# Products from Wood Kinetic Schemes
+# ------------------------------------------------------------------------------
+
+# store concentrations from primary reactions on a mass basis as kg/m^3
+# row = concentration calculated from a particular kinetic scheme
+# column = concentration at time step
+wood = np.ones((13, nt))  # wood concentration array
+tar = np.zeros((13, nt))  # tar concentration array
+
+# products from primary reactions of Blasi 1993, Blasi 2001, Chan 1985,
+# Font 1990, Janse 2000, Koufopanos 199, Liden 1988, Papadikis 2010,
+# Sadhukhan 2009, Thurner 1981
+for i in range(1, nt):
+    wood[0, i], _, tar[0, i], _ = fn.blasi(wood[0, i-1], 0, tar[0, i-1], 0, T, dt)
+    wood[1, i], _, tar[1, i], _ = fn.blasibranca(wood[1, i-1], 0, tar[1, i-1], 0, T, dt)
+    wood[2, i], _, tar[2, i], _, _, _ = fn.chan(wood[2, i-1], 0, tar[2, i-1], 0, 0, 0, T, dt)
+    wood[3, i], _, tar[3, i], _ = fn.font1(wood[3, i-1], 0, tar[3, i-1], 0, T, dt)
+    wood[4, i], _, tar[4, i], _ = fn.font2(wood[4, i-1], 0, tar[4, i-1], 0, T, dt)
+    wood[5, i], _, tar[5, i], _ = fn.janse(wood[5, i-1], 0, tar[5, i-1], 0, T, dt)
+    wood[6, i], _, _, _, _ = fn.koufopanos(wood[6, i-1], 0, 0, 0, 0, T, dt)
+    wood[7, i], _ = fn.liden(wood[7, i-1], 0, T, dt)
+    wood[8, i], _, tar[8, i], _ = fn.papadikis(wood[8, i-1], 0, tar[8, i-1], 0, T, dt)
+    wood[9, i], _, _, _, _ = fn.sadhukhan(wood[9, i-1], 0, 0, 0, 0, T, dt)
+    wood[10, i], _, tar[10, i], _ = fn.thurner(wood[10, i-1], 0, tar[10, i-1], 0, T, dt)
+
+# Products from Ranzi 2014 Kinetic Scheme
+# ------------------------------------------------------------------------------
 
 # weight percent (%) cellulose, hemicellulose, lignin for beech wood
 wtcell = 48
 wthemi = 28
 wtlig = 24
 
-# Initial Calculations
-#------------------------------------------------------------------------------
-
-dt = 0.001                              # time step, delta t
-tmax = 25                               # max time, s
-t = np.linspace(0, tmax, num=tmax/dt)   # time vector
-nt = len(t)                             # total number of time steps
-
-# Calculate Kinetic Reactions and Concentrations
-#------------------------------------------------------------------------------
-
-# kinetics for primary reactions for product concentrations, kg/m^3
-pw0, pg0, pt0, pc0 = kn0.chan2(rhow, Tinf, dt, nt)
-pw1, pg1, pt1, pc1 = kn1.font1(rhow, Tinf, dt, nt)
-pw2, pg2, pt2, pc2 = kn1.font2(rhow, Tinf, dt, nt)
-pw3, pg3, pt3, pc3 = kn2.janse1(rhow, Tinf, dt, nt)
-pw4, pg4, pt4, pc4 = kn3.thurner(rhow, Tinf, dt, nt)
-pw5, pg5, pt5, pc5 = kn4.blasibranca(rhow, Tinf, dt, nt)
-
-# assign concentrations as mass fraction for each scheme, (-)
-wood0 = pw0/rhow;   gas0 = pg0/rhow;    tar0 = pt0/rhow;    char0 = pc0/rhow
-wood1 = pw1/rhow;   gas1 = pg1/rhow;    tar1 = pt1/rhow;    char1 = pc1/rhow
-wood2 = pw2/rhow;   gas2 = pg2/rhow;    tar2 = pt2/rhow;    char2 = pc2/rhow
-wood3 = pw3/rhow;   gas3 = pg3/rhow;    tar3 = pt3/rhow;    char3 = pc0/rhow
-wood4 = pw4/rhow;   gas4 = pg4/rhow;    tar4 = pt4/rhow;    char4 = pc4/rhow
-wood5 = pw5/rhow;   gas5 = pg5/rhow;    tar5 = pt5/rhow;    char5 = pc5/rhow
-
-# Calculate Kinetic Reactions and Concentrations from Ranzi
-#------------------------------------------------------------------------------
-
 # arrays for Ranzi main groups and products as mass fractions, (-)
-pmcell, pcell = kn5.cell(rhow, wtcell, Tinf, dt, nt)     # cellulose
-pmhemi, phemi = kn5.hemi(rhow, wthemi, Tinf, dt, nt)     # hemicellulose
-pmligc, pligc = kn5.ligc(rhow, wtlig, Tinf, dt, nt)      # lignin-c
-pmligh, pligh = kn5.ligh(rhow, wtlig, Tinf, dt, nt)      # lignin-h
-pmligo, pligo = kn5.ligo(rhow, wtlig, Tinf, dt, nt)      # lignin-o
+pmcell, pcell = fn.ranzicell(1, wtcell, T, dt, nt)    # cellulose
+pmhemi, phemi = fn.ranzihemi(1, wthemi, T, dt, nt)    # hemicellulose
+pmligc, pligc = fn.ranziligc(1, wtlig, T, dt, nt)     # lignin-c
+pmligh, pligh = fn.ranziligh(1, wtlig, T, dt, nt)     # lignin-h
+pmligo, pligo = fn.ranziligo(1, wtlig, T, dt, nt)     # lignin-o
 
 # chemical species from Ranzi as mass fraction, (-)
 co = pcell[0] + phemi[0] + pligc[0] + pligh[0] + pligo[0]       # CO
@@ -101,50 +84,83 @@ h2o = pcell[19] + phemi[19] + pligc[19] + pligh[19] + pligo[19]     # H2O
 char = pcell[20] + phemi[20] + pligc[20] + pligh[20] + pligo[20]    # Char
 
 # groups from Ranzi for wood and tar as mass fraction, (-)
-wood6 = pmcell[0] + pmhemi[0] + pmligc[0] + pmligh[0] + pmligo[0]
-tar = ch2o + hcooh + ch3oh + glyox + c2h4o + haa + c2h5oh + c3h6o + xyl + \
-      c6h6o + hmfu + lvg + coum + fe2macr
+wood_ranzi = pmcell[0] + pmhemi[0] + pmligc[0] + pmligh[0] + pmligo[0]
+tar_ranzi = ch2o + hcooh + ch3oh + glyox + c2h4o + haa + c2h5oh + c3h6o + xyl + c6h6o + hmfu + lvg + coum + fe2macr
+
+wood[11] = wood_ranzi
+tar[11] = tar_ranzi
+
+# Products from Miller and Bellan 1997 Kinetic Scheme
+# ------------------------------------------------------------------------------
+
+# composition of beech wood from Table 2 in paper
+wtcell = 0.48   # cellulose mass fraction, (-)
+wthemi = 0.28   # hemicellulose mass fraction, (-)
+wtlig = 0.24    # lignin mass fraction, (-)
+
+cella = np.ones(nt)*wtcell
+hemia = np.ones(nt)*wthemi
+liga = np.ones(nt)*wtlig
+
+tar1, tar2, tar3 = np.zeros(nt), np.zeros(nt), np.zeros(nt)
+
+for i in range(1, nt):
+    cella[i], _, tar1[i], _ = fn.millercell_noR1(cella[i-1], 0, tar1[i-1], 0, T, dt)
+    hemia[i], _, tar2[i], _ = fn.millerhemi_noR1(hemia[i-1], 0, tar2[i-1], 0, T, dt)
+    liga[i], _, tar3[i], _ = fn.millerlig_noR1(liga[i-1], 0, tar3[i-1], 0, T, dt)
+
+wood[12] = cella + hemia + liga
+tar[12] = tar1 + tar2 + tar3
 
 # Plot Results
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-py.rcParams['xtick.major.pad'] = 8
-py.rcParams['xtick.major.size'] = 0
-py.rcParams['ytick.major.pad'] = 8
-py.rcParams['ytick.major.size'] = 0
-py.rcParams['lines.linewidth'] = 2
-py.rcParams['axes.grid'] = True
-py.rcParams['legend.framealpha'] = 0
+py.ion()
+py.close('all')
+
+def despine():
+    # remove top, right axis and tick marks
+    ax = py.gca()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    py.tick_params(axis='both', bottom='off', top='off', left='off', right='off')
 
 py.figure(1)
-py.plot(t, wood0, label='Chan 1985')
-py.plot(t, wood1, label='Font 1990 (fb)')
-py.plot(t, wood2, label='Font 1990 (pp)')
-py.plot(t, wood3, label='Janse 2000')
-py.plot(t, wood4, label='Thurner 1981')
-py.plot(t, wood5, label='Blasi 2001')
-py.plot(t, wood6, label='Ranzi 2014')
-py.title('Wood Conversion, primary reactions at T = {} K'.format(Tinf))
+py.plot(t, wood[0], lw=2, label='blasi 1993')
+py.plot(t, wood[1], lw=2, label='blasi 2001')
+py.plot(t, wood[2], lw=2, label='chan 1985')
+py.plot(t, wood[3], lw=2, label='font1 1990')
+py.plot(t, wood[4], lw=2, label='font2 1990')
+py.plot(t, wood[5], lw=2, label='janse 2000')
+py.plot(t, wood[6], lw=2, label='koufopanos 2000')
+py.plot(t, wood[7], '--', lw=2, label='liden 1988')
+py.plot(t, wood[8], 'o', mec='g', mew=1, markevery=200, label='papadikis 2010')
+py.plot(t, wood[9], '--', lw=2, label='sadhukhan 2009')
+py.plot(t, wood[10], 'yo', mec='y', mew=1, markevery=200, label='thurner 1981')
+py.plot(t, wood[11], '--', lw=2, label='ranzi 2014')
+py.plot(t, wood[12], '--', lw=2, label='miller 1997')
+# py.title('Primary reactions at T = {} K'.format(T))
 py.xlabel('Time (s)')
-py.ylabel('Wood Mass Fraction (dry basis)')
-py.legend(loc='best', numpoints=1)
-py.gca().spines['right'].set_visible(False)
-py.gca().spines['top'].set_visible(False)
+py.ylabel('Wood Concentration (mass fraction)')
+py.legend(loc='best', numpoints=1, fontsize=11, frameon=False)
+py.grid()
+despine()
 
 py.figure(2)
-py.plot(t, tar0, label='Chan 1985')
-py.plot(t, tar1, label='Font 1990 (fb)')
-py.plot(t, tar2, label='Font 1990 (pp)')
-py.plot(t, tar3, label='Janse 2000')
-py.plot(t, tar4, label='Thurner 1981')
-py.plot(t, tar5, label='Blasi 2001')
-py.plot(t, tar, '--k', label='Ranzi 2014 (tar)')
-py.plot(t, tar+h2o, '-k', label='Ranzi 2014 (tar+$\mathrm{H_{2}O}$)')
-py.title('Tar Yield, primary reactions at T = {} K'.format(Tinf))
+py.plot(t, tar[0], lw=2, label='blasi 1993')
+py.plot(t, tar[1], lw=2, label='blasi 2001')
+py.plot(t, tar[2], lw=2, label='chan 1985')
+py.plot(t, tar[3], lw=2, label='font1 1990')
+py.plot(t, tar[4], lw=2, label='font2 1990')
+py.plot(t, tar[5], lw=2, label='janse 2000')
+py.plot(t, tar[8], 'o', mew=1, markevery=200, label='papadikis 2010')
+py.plot(t, tar[10], 'ro', mec='r', markevery=200, label='thurner 1981')
+py.plot(t, tar[11], '--', lw=2, label='ranzi 2014')
+py.plot(t, tar[11]+h2o, '--', lw=2, label='ranzi 2014 + H2O')
+py.plot(t, tar[12], '--', lw=2, label='miller 1997')
+# py.title('Primary reactions at T = {} K'.format(T))
 py.xlabel('Time (s)')
-py.ylabel('Tar Mass Fraction (dry basis)')
-py.legend(loc='best', numpoints=1)
-py.gca().spines['right'].set_visible(False)
-py.gca().spines['top'].set_visible(False)
-
-py.show()
+py.ylabel('Tar Concentration (mass fraction)')
+py.legend(loc='best', numpoints=1, fontsize=11, frameon=False)
+py.grid()
+despine()
