@@ -2,6 +2,8 @@
 
 This repository contains various kinetic reaction schemes for biomass pyrolysis. Each file prepended with `kn` plots the products calculated from a particular scheme. Plots comparing all the schemes are provided by the `plot_primary` and `plot_secondary` files. Functions related to a particular scheme can be found in the `functions` folder. See the comments in each file and function for more details.
 
+The scheme used in `kn_cpc_2016` is referred to as the "CPC scheme" which is the CPC's preferred kinetic scheme for woody biomass pyrolysis. It is a combination of the Blasi 1993, Chan 1985, and Liden 1988 kinetic schemes. The CPC scheme should be used as a starting point for computational models and as a basis of comparison between different models.
+
 *Requirements: Python 3, NumPy, and Matplotlib*
 
 ## References
