@@ -166,10 +166,10 @@ def millerlig(lig, liga, gas, tar, char, T, dt, s=1):
     nchar = new char concentration, kg/m^3
     """
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
-    A1 = 2.1e16;    E1 = 186.7    # lig -> liga
-    A2 = 8.75e15;   E2 = 202.4    # liga -> tar
-    A3 = 2.6e11;    E3 = 145.7    # liga -> x*char + (1-x)*gas
-    A4 = 4.28e6;    E4 = 108      # tar -> gas
+    A1 = 9.6e8;     E1 = 107.6      # lig -> liga
+    A2 = 1.5e9;     E2 = 143.8      # liga -> tar
+    A3 = 7.7e6;     E3 = 111.4      # liga -> x*char + (1-x)*gas
+    A4 = 4.28e6;    E4 = 108        # tar -> gas
     R = 0.008314    # universal gas constant, kJ/mol*K
     x = 0.75        # char formation mass ratio for lignin
 
