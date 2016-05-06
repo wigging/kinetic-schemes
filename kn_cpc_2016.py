@@ -31,7 +31,8 @@ nt = len(t)                             # total number of time steps
 def cpc(wood, gas, tar, char, water, vapor, T, dt, s=1):
     """
     Primary and secondary kinetic reactions for Cpc 2016 scheme based on
-    Blasi 1993, Chan 1985, and Liden 1988 kinetics.
+    Blasi 1993, Chan 1985, and Liden 1988 kinetics. Same scheme as presented in
+    Papadikis 2010 but with the addition of the water reaction.
 
     Parameters
     ----------
