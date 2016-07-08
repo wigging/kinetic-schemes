@@ -99,6 +99,23 @@ for i in range(1, nt):
     wood[0, i], gas[0, i], tar[0, i], gaschar[0, i] = liden(wood[0, i-1], gas[0, i-1], tar[0, i-1], gaschar[0, i-1], T, dt)
     wood[1, i], gas[1, i], tar[1, i], gaschar[1, i] = liden(wood[1, i-1], gas[1, i-1], tar[1, i-1], gaschar[1, i-1], T, dt, s=2)
 
+# estimate individual gas and char yields using FC of wood and max tar yield
+FC = 0.14           # weight fraction of fixed carbon in wood, (-)
+phi = 0.703         # max theoretical tar yield, (-)
+c3 = FC/(1-phi)     # char fraction of wood, (-)
+g3 = 1-c3           # gas fraction of wood, (-)
+
+cc = c3*gaschar[1]              # char concentration vector
+gg = gas[1] + g3*gaschar[1]     # gas concentration vector
+
+# Print
+# ------------------------------------------------------------------------------
+
+# check mass balance at each time step
+print('total mass fraction (primary) \n', wood[0]+gas[0]+tar[0]+gaschar[0])
+print('total mass fraction (pri+sec) \n', wood[1]+gas[1]+tar[1]+gaschar[1])
+print('total mass fraction (all) \n', wood[1]+gg+tar[1]+cc)
+
 # Plot Results
 # ------------------------------------------------------------------------------
 
@@ -126,3 +143,15 @@ py.xlabel('Time (s)')
 py.ylabel('Concentration (mass fraction)')
 py.legend(loc='best', numpoints=1, frameon=False)
 py.grid()
+
+py.figure(3)
+py.plot(t, wood[1], lw=2, label='wood')
+py.plot(t, gg, lw=2, label='gas')
+py.plot(t, tar[1], lw=2, label='tar')
+py.plot(t, cc, lw=2, label='char')
+py.title('Liden 1988 primary and secondary reactions at T = {} K'.format(T))
+py.xlabel('Time (s)')
+py.ylabel('Concentration (mass fraction)')
+py.legend(loc='best', numpoints=1, frameon=False)
+py.grid()
+
