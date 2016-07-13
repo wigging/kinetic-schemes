@@ -107,11 +107,26 @@ for i in range(1, nt):
 for i in range(1, nt):
     wood2[i], gas2[i], tar2[i], char2[i] = papadikis(wood2[i-1], gas2[i-1], tar2[i-1], char2[i-1], T, dt, s=2)
 
+# Print Mass Balance
+# ------------------------------------------------------------------------------
+
+tot = wood + gas + tar + char       # should be equal to 1
+tot2 = wood2 + gas2 + tar2 + char2  # should be equal to 1
+
+print('mass balance total (primary)\n', tot)
+print('mass balance total (primary and secondary)\n', tot2)
+
 # Plot Results
 # ------------------------------------------------------------------------------
 
 py.ion()
 py.close('all')
+
+def despine():
+    ax = py.gca()
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    py.tick_params(axis='both', bottom='off', top='off', left='off', right='off')
 
 py.figure(1)
 py.plot(t, wood, lw=2, label='wood')
@@ -120,17 +135,20 @@ py.plot(t, tar, lw=2, label='tar')
 py.plot(t, char, lw=2, label='char')
 py.title('Papadikis 2010 primary reactions at T = {} K'.format(T))
 py.xlabel('Time (s)')
-py.ylabel('Concentration ($kg/m^3$)')
+py.ylabel('Mass Fraction (m.f.)')
 py.legend(loc='best', numpoints=1)
 py.grid()
+despine()
 
 py.figure(2)
 py.plot(t, wood2, lw=2, label='wood')
 py.plot(t, gas2, lw=2, label='gas')
 py.plot(t, tar2, lw=2, label='tar')
 py.plot(t, char2, lw=2, label='char')
-py.title('Papadikis 2010 primary and secondary reactions at T = {} K'.format(T))
+py.title('Papadikis 2010 primary + secondary reactions at T = {} K'.format(T))
 py.xlabel('Time (s)')
-py.ylabel('Concentration ($kg/m^3$)')
+py.ylabel('Mass Fraction (m.f.)')
 py.legend(loc='best', numpoints=1)
 py.grid()
+despine()
+
