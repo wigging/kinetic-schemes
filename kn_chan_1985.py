@@ -102,20 +102,20 @@ def chan(wood, gas, tar, char, water, vapor, T, dt, s=1):
 
 # store concentrations from primary reactions at each time step
 # concentrations reported on a mass basis as kg/m^2
-wood = np.ones(nt)      # wood concentration vector
-gas = np.zeros(nt)      # gas concentration vector
-tar = np.zeros(nt)      # tar concentration vector
-char = np.zeros(nt)     # char concentration vector
-water = np.ones(nt)*mc     # moisture content concentration vector
-vapor = np.zeros(nt)       # water vapor concentration vector
+wood = np.ones(nt)*(1-mc)   # wood concentration vector
+gas = np.zeros(nt)          # gas concentration vector
+tar = np.zeros(nt)          # tar concentration vector
+char = np.zeros(nt)         # char concentration vector
+water = np.ones(nt)*mc      # moisture content concentration vector
+vapor = np.zeros(nt)        # water vapor concentration vector
 
 # store concentrations from primary and secondary reactions at each time step
-wood2 = np.ones(nt)     # wood concentration vector
-gas2 = np.zeros(nt)     # gas concentration vector
-tar2 = np.zeros(nt)     # tar concentration vector
-char2 = np.zeros(nt)    # char concentration vector
-water2 = np.ones(nt)*mc    # moisture content concentration vector
-vapor2 = np.zeros(nt)      # water vapor concentration vector
+wood2 = np.ones(nt)*(1-mc)  # wood concentration vector
+gas2 = np.zeros(nt)         # gas concentration vector
+tar2 = np.zeros(nt)         # tar concentration vector
+char2 = np.zeros(nt)        # char concentration vector
+water2 = np.ones(nt)*mc     # moisture content concentration vector
+vapor2 = np.zeros(nt)       # water vapor concentration vector
 
 # products from primary reactions only
 for i in range(1, nt):
