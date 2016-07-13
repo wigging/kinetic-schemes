@@ -44,7 +44,7 @@ def liden(wood, gas1, tar, gaschar, T, dt, s=1):
     Returns
     -------
     nwood = new wood concentration, kg/m^3
-    ngas = new gas concentration, kg/m^3
+    ngas1 = new gas concentration, kg/m^3
     ntar = new tar concentration, kg/m^3
     ngaschar = new (gas+char) concentration, kg/m^3
     """
@@ -104,9 +104,11 @@ def liden2(wood, gas1, tar, gaschar, gas, char, T, dt):
     Returns
     -------
     nwood = new wood concentration, kg/m^3
-    ngas = new gas concentration, kg/m^3
+    ngas1 = new gas1 concentration, kg/m^3
     ntar = new tar concentration, kg/m^3
     ngaschar = new (gas+char) concentration, kg/m^3
+    ngas = new gas concentration, kg/m^3
+    nchar = new char concentration, kg/m^3
     """
     # A = pre-factor (1/s) and E = activation energy (kJ/mol)
     A = 1.0e13;         E = 183.3     # wood -> tar and (gas + char)
