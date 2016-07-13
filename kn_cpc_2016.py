@@ -133,6 +133,16 @@ vapor2 = np.zeros(nt)         # water vapor concentration vector
 for i in range(1, nt):
     wood2[i], gas2[i], tar2[i], char2[i], water2[i], vapor2[i] = cpc(wood2[i-1], gas2[i-1], tar2[i-1], char2[i-1], water2[i-1], vapor2[i-1], T, dt, s=2)
 
+# Print Mass Balances
+# ------------------------------------------------------------------------------
+
+# check mass balance at each time step
+tot1 = wood + gas + tar + char + water + vapor
+print('total mass fraction (primary) \n', tot1)
+
+tot2 = wood2 + gas2 + tar2 + char2 + water2 + vapor2
+print('total mass fraction (pri+sec) \n', tot2)
+
 # Plot Results
 # ------------------------------------------------------------------------------
 
