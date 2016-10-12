@@ -8,7 +8,7 @@ comparing all the kinetic schemes are provided by the `plot_primary` and
 `plot_secondary` files which use the functions contained in the `functions`
 folder. See the comments in each file for more details.
 
-The scheme used in `cpc_2016` is referred to as the "CPC scheme". It is a
+The scheme used in `cpc_2016.py` is referred to as the "CPC scheme". It is a
 combination of the Blasi 1993, Chan 1985, and Liden 1988 kinetic schemes. The
 CPC scheme should be used as a starting point for computational models and as a
 basis of comparison between different types of models.
@@ -23,8 +23,8 @@ Python 3, NumPy, and Matplotlib are needed to run the examples in this repo.
 
 Kinetic schemes from the references listed below have been included in this
 repository. Files for a particular scheme are named according to author and
-year of publication. For example, the scheme from the Di Blasi 1993 paper is plotted by the
-`blasi_1993.py` file.
+year of publication. For example, the scheme from the Di Blasi 1993 paper is
+plotted by the file named `blasi_1993.py`.
 
 - Adjaye, 1993. Thesis Appendix F, pp 311-319.
 
