@@ -1,14 +1,32 @@
 # Kinetic Reaction Schemes for Biomass Pyrolysis
 
-This repository contains various kinetic reaction schemes for biomass pyrolysis. Each file prepended with `kn` plots the products calculated from a particular scheme. Plots comparing all the schemes are provided by the `plot_primary` and `plot_secondary` files. Functions related to a particular scheme can be found in the `functions` folder. See the comments in each file and function for more details.
+This repository contains various kinetic reaction schemes for biomass
+pyrolysis. Each file plots the products for that particular scheme. For
+example, `blasi_2001.py` uses the kinetic parameters from the Di Blasi 2001
+paper to plot the conversion of wood to gas, tar, and char products. Plots
+comparing all the kinetic schemes are provided by the `plot_primary` and
+`plot_secondary` files which use the functions contained in the `functions`
+folder. See the comments in each file for more details.
 
-The scheme used in `kn_cpc_2016` is referred to as the "CPC scheme" which is the CPC's preferred kinetic scheme for woody biomass pyrolysis. It is a combination of the Blasi 1993, Chan 1985, and Liden 1988 kinetic schemes. The CPC scheme should be used as a starting point for computational models and as a basis of comparison between different models.
+The scheme used in `cpc_2016` is referred to as the "CPC scheme". It is a
+combination of the Blasi 1993, Chan 1985, and Liden 1988 kinetic schemes. The
+CPC scheme should be used as a starting point for computational models and as a
+basis of comparison between different types of models.
 
-*Requirements: Python 3, NumPy, and Matplotlib*
+Contributions to this repository can be made via a Pull Request or suggested as
+an Issue. Our contact information is also available on the
+[cpcbiomass.org](http://cpcbiomass.org) website.
+
+Python 3, NumPy, and Matplotlib are needed to run the examples in this repo.
 
 ## References
 
-Kinetic schemes from the references listed below have been included in this repository. Files for a particular scheme are named according to author and year. For example, the scheme from the Di Blasi 1993 paper is plotted by the `kn_blasi_1993.py` file.
+Kinetic schemes from the references listed below have been included in this
+repository. Files for a particular scheme are named according to author and
+year of publication. For example, the scheme from the Di Blasi 1993 paper is plotted by the
+`blasi_1993.py` file.
+
+- Adjaye, 1993. Thesis Appendix F, pp 311-319.
 
 - Blasi, 1993. Combustion Science and Technology, 90, pp 315–340.
 
@@ -36,4 +54,6 @@ Kinetic schemes from the references listed below have been included in this repo
 
 ## License
 
-Files in this repository are available under the MIT license. See the LICENSE file for more information.
+Files in this repository are available under the MIT license. See the LICENSE
+file for more information.
+
