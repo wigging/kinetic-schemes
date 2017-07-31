@@ -90,53 +90,47 @@ def adjaye2(c, t):
     r = rates vector
     """
 
-    # concentrations
-    oil = c[0]      # bio-oil concentration
-    nonvol = c[1]   # non-volatiles concentration
-    vol = c[2]      # volatiles concentration
-    # coke = c[3]     # coke concentration
-    # res = c[4]      # residuce concentration
-    # aqueous = c[4]  # aqueous concentration
-    # organic = c[6]  # organic distillate concentration
-    # hydro = c[7]    # hydrocarbon concentration
-    # gas = c[8]      # gas concentration
+    # concentrations as kmol/m^3
+    Coil = c[0]     # bio-oil
+    Cnon = c[1]     # non-volatiles
+    Cvol = c[2]     # volatiles
 
-    # rate constants
-    Knv = 0.4       # bio-oil -> non-volatiles
-    Kvo = 1.1       # bio-oil -> volatiles
-    Kcr = 6.8e-5    # non-volatiles -> volatiles
-    Kc1 = 3.4e-5    # non-volatiles -> coke
-    Kr1 = 3.3e-7    # non-volatiles -> residue
-    Kr2 = 8.3e-5    # volatiles -> residue
-    Kaq = 3.4e-6    # volatiles -> aqueous fraction
-    Kod = 8.3e-4    # volatiles -> organic distillates
-    Kga = 1.1e-4    # volatiles -> gas
-    Kc2 = 6.4e-5    # volatiles -> coke
-    Khc = 6.0e-4    # volatiles -> hydrocarbons
-
-    # reaction orders
-    nv = 1      # bio-oil -> non-volatiles
-    vo = 1      # bio-oil -> volatiles
-    cr = 0.9    # non-volatiles -> volatiles
-    c1 = 0.9    # non-volatiles -> coke
-    r1 = 2.2    # non-volatiles -> residue
-    r2 = 1      # volatiles -> residue
-    aq = 1.6    # volatiles -> aqueous fraction
-    od = 1      # volatiles -> organic distillates
-    ga = 0.7    # volatiles -> gas
-    c2 = 1.1    # volatiles -> coke
-    hc = 0.9    # volatiles -> hydrocarbons
+    # rate constants as K, m^3/(kg hr)
+    # reaction orders as n, (-)
+    K1 = 0.4        # bio-oil -> non-volatiles
+    n1 = 1.0
+    K2 = 1.1        # bio-oil -> volatiles
+    n2 = 1
+    K3 = 6.8e-5     # non-volatiles -> volatiles
+    n3 = 0.9
+    K4 = 3.4e-5     # non-volatiles -> coke
+    n4 = 0.9
+    K5 = 3.3e-7     # non-volatiles -> residue
+    n5 = 2.2
+    K6 = 8.3e-5     # volatiles -> residue
+    n6 = 1
+    K7 = 3.4e-6     # volatiles -> aqueous fraction
+    n7 = 1.6
+    K8 = 8.3e-4     # volatiles -> organic distillates
+    n8 = 1
+    K9 = 1.1e-4     # volatiles -> gas
+    n9 = 0.7
+    K10 = 6.4e-5    # volatiles -> coke
+    n10 = 1.1
+    K11 = 6.0e-4    # volatiles -> hydrocarbons
+    n11 = 0.9
 
     # reaction rates
-    rOil = -Knv*oil**nv - Kvo*oil**vo
-    rNonVol = Knv*oil**nv - Kcr*nonvol**cr - Kc1*nonvol**c1 - Kr1*nonvol**r1
-    rVol = Kvo*oil**vo + Kcr*nonvol**cr - Kr2*vol**r2 - Kc2*vol**c2 - Kaq*vol**aq - Kod*vol**od - Khc*vol**hc - Kga*vol**ga
-    rCoke = Kc1*nonvol**c1 + Kc2*vol**c2
-    rRes = Kr1*nonvol**r1 + Kr2*vol**r2
-    rAq = Kaq*vol**aq
-    rOrg = Kod*vol**od
-    rHydro = Khc*vol**hc
-    rGas = Kga*vol**ga
+    rOil = -K1*Coil**n1 - K2*Coil**n2
+    rNonVol = K1*Coil**n1 - K3*Cnon**n3 - K4*Cnon**n4 - K5*Cnon**n5
+    rVol = (K2*Coil**n2 + K3*Cnon**n3 - K6*Cvol**n6 - K7*Cvol**n7 - K8*Cvol**n8
+            - K9*Cvol**n9 - K10*Cvol**n10 - K11*Cvol**n11)
+    rCoke = K4*Cnon**n4 + K10*Cvol**n10
+    rRes = K5*Cnon**n5 + K6*Cvol**n6
+    rAq = K7*Cvol**n7
+    rOrg = K8*Cvol**n8
+    rHydro = K11*Cvol**n11
+    rGas = K9*Cvol**n9
 
     # return list of reaction rates
     dcdt = [rOil, rNonVol, rVol, rCoke, rRes, rAq, rOrg, rHydro, rGas]
@@ -156,8 +150,8 @@ plt.figure(1)
 plt.plot(t, oil, lw=2, label='oil')
 plt.plot(t, nonvol, lw=2, label='nonvol')
 plt.plot(t, vol, lw=2, label='vol')
-plt.xlabel('Time')
-plt.ylabel('Concentration')
+plt.xlabel('Time (hr)')
+plt.ylabel('Concentration (kmol/m^3)')
 plt.legend(loc='best', numpoints=1)
 plt.grid()
 
@@ -171,8 +165,8 @@ plt.plot(t, conc[:, 5], lw=2, label='aq')
 plt.plot(t, conc[:, 6], lw=2, label='org')
 plt.plot(t, conc[:, 7], lw=2, label='hydro')
 plt.plot(t, conc[:, 8], lw=2, label='gas')
-plt.xlabel('Time')
-plt.ylabel('Concentration')
+plt.xlabel('Time (hr)')
+plt.ylabel('Concentration (kmol/m^3)')
 plt.legend(loc='best', numpoints=1)
 plt.grid()
-
+# plt.savefig('/Users/Gavin/Desktop/adjaye.pdf', bbox_inches='tight')
