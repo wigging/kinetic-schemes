@@ -1,5 +1,5 @@
 """
-Adjaye kinetics with adjusted kinetic parameters from Vivek at NREL.
+Adjaye kinetics with adjusted reaction pathways from Vivek at NREL.
 
 References:
 
@@ -19,75 +19,26 @@ import scipy.integrate as sp
 # Parameters
 # -----------------------------------------------------------------------------
 
-dt = 0.01                               # time step, delta t
-tmax = 1000                             # max time, s
-t = np.linspace(0, tmax, num=tmax/dt)   # time vector
-nt = len(t)                             # total number of time steps
+t1 = np.linspace(0, 10, num=1000)     # time vector for 10 seconds
+t2 = np.linspace(0, 1800, num=1000)   # time vector for 1800 seconds or 30 minutes
 
-# Approach 1 - Euler method
+# Concentrations from Adjaye
 # -----------------------------------------------------------------------------
 
-def adjaye(oil, nonvol, vol, dt):
-    """adjaye kinetics for 370 degC"""
-    Knv = 0.4
-    Kv = 1.1
-    b1 = 1
-    b2 = 1
-
-    Kcr = 6.8e-5
-    cr = 0.9
-    Kr1 = 3.3e-7
-    r1 = 2.2
-    Kc1 = 3.4e-5
-    c1 = 0.9
-
-    Kr2 = 8.3e-5
-    r2 = 1
-    Kc2 = 6.4e-5
-    c2 = 1.1
-    Ka = 3.4e-6
-    a = 1.6
-    Kd = 8.3e-4
-    d = 1
-    Kh = 6e-4
-    h = 0.9
-    Kg = 1.1e-4
-    g = 0.7
-
-    rOil = -Knv*oil**b1 - Kv*oil**b2
-    nOil = oil + rOil*dt
-
-    rNonVol = Knv*oil**b1 - Kcr*nonvol**cr - Kr1*nonvol**r1 - Kc1*nonvol**c1
-    nNonVol = nonvol + rNonVol*dt
-
-    rVol = Kv*oil**b2 + Kcr*nonvol**cr - Kr2*vol**r2 - Kc2*vol**c2 - Ka*vol**a - Kd*vol**d - Kh*vol**h - Kg*vol**g
-    nVol = vol + rVol*dt
-
-    return nOil, nNonVol, nVol
-
-
-oil = np.ones(nt)       # bio-oil concentration
-nonvol = np.zeros(nt)   # non-volatiles concentration
-vol = np.zeros(nt)      # volatiles concentration
-
-for i in range(1, nt):
-    oil[i], nonvol[i], vol[i] = adjaye(oil[i-1], nonvol[i-1], vol[i-1], dt)
-
-# Approach 2 - SciPy odeint solver with primary and secondary reactions
-# -----------------------------------------------------------------------------
-
-def adjaye2(c, t):
+def adjaye(c, t):
     """
-    Adjaye kinetics at 370C using Scipy odeint solver.
+    Calculate concentrations based on Adjaye kinetics at 370C using Scipy
+    odeint solver.
 
     Inputs
     ------
-    c = concentration vector where c[0] = oil, c[1] = nonvol, c[2] = vol
-    t = time vector
+    c = concentration vector, kmol/m^3
+        where c[0] = oil, c[1] = nonvol, c[2] = vol
+    t = time vector, s
 
     Returns
     -------
-    r = rates vector
+    r = reaction rates vector, kmol/(kg cat. hr)
     """
 
     # concentrations as kmol/m^3
@@ -95,7 +46,7 @@ def adjaye2(c, t):
     Cnon = c[1]     # non-volatiles
     Cvol = c[2]     # volatiles
 
-    # rate constants as K, m^3/(kg hr)
+    # rate constants as K, assumed to be m^3/(kg hr)
     # reaction orders as n, (-)
     K1 = 0.4        # bio-oil -> non-volatiles
     n1 = 1.0
@@ -120,7 +71,7 @@ def adjaye2(c, t):
     K11 = 6.0e-4    # volatiles -> hydrocarbons
     n11 = 0.9
 
-    # reaction rates
+    # reaction rates as kmol/(kg cat. hr)
     rOil = -K1*Coil**n1 - K2*Coil**n2
     rNonVol = K1*Coil**n1 - K3*Cnon**n3 - K4*Cnon**n4 - K5*Cnon**n5
     rVol = (K2*Coil**n2 + K3*Cnon**n3 - K6*Cvol**n6 - K7*Cvol**n7 - K8*Cvol**n8
@@ -138,7 +89,9 @@ def adjaye2(c, t):
     return dcdt
 
 
-conc = sp.odeint(adjaye2, [1, 0, 0, 0, 0, 0, 0, 0, 0], t)
+co = [1, 0, 0, 0, 0, 0, 0, 0, 0]    # initial concentrations
+conc1 = sp.odeint(adjaye, co, t1)   # concentrations for times t1
+conc2 = sp.odeint(adjaye, co, t2)   # concentration for times t2
 
 # Plot
 # ------------------------------------------------------------------------------
@@ -147,26 +100,34 @@ plt.ion()
 plt.close('all')
 
 plt.figure(1)
-plt.plot(t, oil, lw=2, label='oil')
-plt.plot(t, nonvol, lw=2, label='nonvol')
-plt.plot(t, vol, lw=2, label='vol')
-plt.xlabel('Time (hr)')
+plt.plot(t1, conc1[:, 0], lw=2, label='oil')
+plt.plot(t1, conc1[:, 1], lw=2, label='nonvol')
+plt.plot(t1, conc1[:, 2], lw=2, label='vol')
+plt.plot(t1, conc1[:, 3], lw=2, label='coke')
+plt.plot(t1, conc1[:, 4], lw=2, label='res')
+plt.plot(t1, conc1[:, 5], lw=2, label='aq')
+plt.plot(t1, conc1[:, 6], lw=2, label='org')
+plt.plot(t1, conc1[:, 7], lw=2, label='hydro')
+plt.plot(t1, conc1[:, 8], lw=2, label='gas')
+plt.xlabel('Time (s)')
 plt.ylabel('Concentration (kmol/m^3)')
-plt.legend(loc='best', numpoints=1)
+plt.legend(fontsize=10, loc='best', numpoints=1)
 plt.grid()
+# plt.savefig('/Users/Gavin/Desktop/adjaye1.pdf', bbox_inches='tight')
 
 plt.figure(2)
-plt.plot(t, conc[:, 0], lw=2, label='oil')
-plt.plot(t, conc[:, 1], lw=2, label='nonvol')
-plt.plot(t, conc[:, 2], lw=2, label='vol')
-plt.plot(t, conc[:, 3], lw=2, label='coke')
-plt.plot(t, conc[:, 4], lw=2, label='res')
-plt.plot(t, conc[:, 5], lw=2, label='aq')
-plt.plot(t, conc[:, 6], lw=2, label='org')
-plt.plot(t, conc[:, 7], lw=2, label='hydro')
-plt.plot(t, conc[:, 8], lw=2, label='gas')
-plt.xlabel('Time (hr)')
+plt.plot(t2, conc2[:, 0], lw=2, label='oil')
+plt.plot(t2, conc2[:, 1], lw=2, label='nonvol')
+plt.plot(t2, conc2[:, 2], lw=2, label='vol')
+plt.plot(t2, conc2[:, 3], lw=2, label='coke')
+plt.plot(t2, conc2[:, 4], lw=2, label='res')
+plt.plot(t2, conc2[:, 5], lw=2, label='aq')
+plt.plot(t2, conc2[:, 6], lw=2, label='org')
+plt.plot(t2, conc2[:, 7], lw=2, label='hydro')
+plt.plot(t2, conc2[:, 8], lw=2, label='gas')
+plt.xlabel('Time (s)')
 plt.ylabel('Concentration (kmol/m^3)')
-plt.legend(loc='best', numpoints=1)
+plt.legend(fontsize=10, loc='best', numpoints=1)
 plt.grid()
-# plt.savefig('/Users/Gavin/Desktop/adjaye.pdf', bbox_inches='tight')
+# plt.savefig('/Users/Gavin/Desktop/adjaye2.pdf', bbox_inches='tight')
+
