@@ -1,7 +1,13 @@
 """
-Adjaye kinetics with adjusted reaction pathways from Vivek at NREL.
+Adjaye kinetic scheme for conversion of bio-oil over zeolite catalyst. Reaction
+pathways were adjusted based on available kinetic parameters. See function
+definition for more details.
 
 References:
+
+Adjaye, J.D. Catalytic Conversion of Biomass-Derived Oils to Fuels and
+Chemicals. Thesis submitted to Department of Chemical Engineering, University
+of Saskatchewan, 1993.
 
 Adjaye, J.D. & Bakhshi, N.N., 1995. Catalytic Conversion of a Biomass-Derived
 Oil to Fuels and Chemicals I: Model Compound Studies and Reaction Pathways.
@@ -27,8 +33,10 @@ t2 = np.linspace(0, 1800, num=1000)   # time vector for 1800 seconds or 30 minut
 
 def adjaye(c, t):
     """
-    Calculate concentrations based on Adjaye kinetics at 370C using Scipy
-    odeint solver.
+    Calculate concentrations based on Adjaye kinetic scheme for bio-oil
+    conversion in fixed bed of zeolite catalyst. Kinetic parameters were
+    evaluated at 370C. Reaction pathways adjusted based on available data in
+    Adjaye 1995 papers.
 
     Inputs
     ------
@@ -93,6 +101,10 @@ co = [1, 0, 0, 0, 0, 0, 0, 0, 0]    # initial concentrations
 conc1 = sp.odeint(adjaye, co, t1)   # concentrations for times t1
 conc2 = sp.odeint(adjaye, co, t2)   # concentration for times t2
 
+# check mass balance, values in array should be same as initial concentration
+total1 = conc1.sum(axis=1)
+total2 = conc2.sum(axis=1)
+
 # Plot
 # ------------------------------------------------------------------------------
 
@@ -111,7 +123,7 @@ plt.plot(t1, conc1[:, 7], lw=2, label='hydro')
 plt.plot(t1, conc1[:, 8], lw=2, label='gas')
 plt.xlabel('Time (s)')
 plt.ylabel('Concentration (kmol/m^3)')
-plt.legend(fontsize=10, loc='best', numpoints=1)
+plt.legend(fontsize=10, frameon=False, loc='best', numpoints=1)
 plt.grid()
 # plt.savefig('/Users/Gavin/Desktop/adjaye1.pdf', bbox_inches='tight')
 
@@ -127,7 +139,8 @@ plt.plot(t2, conc2[:, 7], lw=2, label='hydro')
 plt.plot(t2, conc2[:, 8], lw=2, label='gas')
 plt.xlabel('Time (s)')
 plt.ylabel('Concentration (kmol/m^3)')
-plt.legend(fontsize=10, loc='best', numpoints=1)
+plt.legend(fontsize=10, frameon=False, loc='best', numpoints=1)
 plt.grid()
+# plt.ylim(ymin=0)
 # plt.savefig('/Users/Gavin/Desktop/adjaye2.pdf', bbox_inches='tight')
 
