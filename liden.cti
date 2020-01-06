@@ -1,0 +1,63 @@
+# Kinetic scheme for biomass fast pyrolysis based on Liden 1988 paper.
+#
+#
+# A.G. Liden, F. Berruti and D.S. Scott. A Kinetic Model for the Production of
+# Liquids from the Flash Pyrolysis of Biomass. Chemical Engineering
+# Communications, vol. 65, pp. 207-221, 1988.
+
+#-------------------------------------------------------------------------------
+# Phases data
+#-------------------------------------------------------------------------------
+
+units(
+    length = "m",
+    mass = "kg",
+    quantity = "mol",
+    time = "s",
+    energy = "J",
+    act_energy = "kJ/mol",
+    pressure = "Pa"
+)
+
+ideal_gas(
+    elements = "C",
+    species = "wood gas tar gaschar",
+    reactions = "all"
+)
+
+#-------------------------------------------------------------------------------
+# Species data
+#-------------------------------------------------------------------------------
+
+species(
+    name = "wood",
+    atoms = "C:1"
+)
+
+species(
+    name = "gas",
+    atoms = "C:1"
+)
+
+species(
+    name = "tar",
+    atoms = "C:1"
+)
+
+species(
+    name = "gaschar",
+    atoms = "C:1"
+)
+
+#-------------------------------------------------------------------------------
+# Reaction data
+#-------------------------------------------------------------------------------
+
+# Reaction 1
+reaction("wood => tar", [7.03e12, 0, 183.3])
+
+# Reaction 2
+reaction("tar => gas", [4.28e6, 0, 107.5])
+
+# Reaction 3
+reaction("wood => gaschar", [2.97e12, 0, 183.3])

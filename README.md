@@ -8,7 +8,7 @@ batch reactor example. See the comments in each file for more information.
 
 Python 3 along with the Matplotlib, NumPy, and SciPy packages are needed to run the examples. Cantera is also used for some of the examples.
 
-The `liden_1988.py` example uses the kinetic parameters from the Liden 1988 paper to plot the conversion of wood to gas, tar, and char products.
+The `liden_1988.py` file uses the kinetic parameters from the Liden 1988 paper to plot the conversion of wood to gas, tar, and char products.
 
 ```python
 # run the Liden 1988 example from the command line
@@ -32,8 +32,8 @@ Issues page.
 
 Kinetic schemes from the references listed below have been included in this
 repository. Files for a particular scheme are named according to author and
-year of publication. For example, the scheme from the Di Blasi 1993 paper is
-plotted by the file named `blasi_1993.py`.
+year of publication. For example, code related to the Di Blasi 1993 paper is
+in the file named `blasi_1993.py`.
 
 - Adjaye, 1993. Thesis Appendix F, pp. 311-319.
 - Blasi, 1993. Combustion Science and Technology, 90, pp. 315–340.
@@ -54,4 +54,3 @@ plotted by the file named `blasi_1993.py`.
 
 Files in this repository are available under the MIT license. See the LICENSE
 file for more information.
-

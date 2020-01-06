@@ -5,8 +5,8 @@ from scipy.integrate import solve_ivp
 
 def dcdt_liden(t, y):
     """
-    Function for solving a system of ODEs representing the biomass pyrolysis
-    kinetics from Liden 1988. Kinetic scheme represented as
+    System of ODEs representing the biomass pyrolysis kinetic reactions from
+    Liden 1988. Reactions in the kinetic scheme are
 
         Reaction 1: wood -> tar
         Reaction 2: tar -> gas
@@ -27,7 +27,7 @@ def dcdt_liden(t, y):
     -------
     sol : object
         Solution containing mass fractions at each time step. Time vector is
-        sol.t and correspond mass fraction array is sol.y where
+        sol.t and corresponding mass fraction array is sol.y where
             wood = sol.y[0]
             gas = sol.y[1]
             tar = sol.y[2]
@@ -67,21 +67,58 @@ def dcdt_liden(t, y):
     return dwood_dt, dgas_dt, dtar_dt, dgaschar_dt
 
 
+# Parameters
+# ----------------------------------------------------------------------------
+
 t_span = (0, 25)        # time span to evaluate solution [s]
 y0 = [1, 0, 0, 0]       # initial mass fractions, start with all wood [-]
+
+# Calculate mass fractions as batch reactor
+# ----------------------------------------------------------------------------
 
 # solve for mass fractions at each time point
 sol = solve_ivp(dcdt_liden, t_span, y0)
 
-# total mass fractions should equal 1.0
-tot = sol.y[0] + sol.y[1] + sol.y[2] + sol.y[3]
+# total mass fractions should equal one
+tot1 = sol.y[0] + sol.y[1] + sol.y[2] + sol.y[3]
+
+# assume a fixed carbon to estimate individual char and gas yields
+phistar = 0.703             # maximum theoretical tar yield [-]
+fc = 0.14                   # weight fraction of fixed carbon in wood
+c3 = fc / (1 - phistar)     # char fraction for wood -> (gas+char)
+g3 = 1 - c3                 # gas fraction for wood -> (gas+char)
+
+# mass fractions for each component
+wood = sol.y[0]
+gas = sol.y[1] + g3 * sol.y[3]
+tar = sol.y[2]
+char = c3 * sol.y[3]
+
+# total mass fractions should equal one
+tot2 = wood + gas + tar + char
+
+# Plot
+# ----------------------------------------------------------------------------
 
 fig, ax = plt.subplots(tight_layout=True)
 ax.plot(sol.t, sol.y[0], label='wood')
 ax.plot(sol.t, sol.y[1], label='gas')
 ax.plot(sol.t, sol.y[2], label='tar')
 ax.plot(sol.t, sol.y[3], label='gaschar')
-ax.plot(sol.t, tot, 'k:', label='total')
+ax.plot(sol.t, tot1, 'k:', label='total')
+ax.grid(color='0.9')
+ax.legend(loc='best')
+ax.set_frame_on(False)
+ax.set_xlabel('Time [s]')
+ax.set_ylabel('Mass fraction [-]')
+ax.tick_params(color='0.9')
+
+fig, ax = plt.subplots(tight_layout=True)
+ax.plot(sol.t, wood, label='wood')
+ax.plot(sol.t, gas, label='gas')
+ax.plot(sol.t, tar, label='tar')
+ax.plot(sol.t, char, label='char')
+ax.plot(sol.t, tot2, 'k:', label='total')
 ax.grid(color='0.9')
 ax.legend(loc='best')
 ax.set_frame_on(False)
