@@ -110,11 +110,7 @@ sol = solve_ivp(dcdt_debiagi, (time[0], time[-1]), y0, t_eval=time)
 # Print
 # ----------------------------------------------------------------------------
 
-print('--- Initial ---')
-print(f'CELL        {sol.y[0][0]}')
-print(f'GMSW        {sol.y[22][0]}')
-
-print('--- Final ---')
+print('--- Final Yields ---')
 for i, sp in enumerate(species):
     print(f'{sp:11} {sol.y[i][-1]:.4f}')
 

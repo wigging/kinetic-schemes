@@ -34,6 +34,9 @@ for tm in time:
     sim.advance(tm)
     states.append(r.thermo.state, t=tm)
 
+# total mass fractions should equal one
+tot1 = states('wood').Y[:, 0] + states('gas').Y[:, 0] + states('tar').Y[:, 0] + states('gaschar').Y[:, 0]
+
 # assume a fixed carbon to estimate individual char and gas yields
 phistar = 0.703             # maximum theoretical tar yield [-]
 fc = 0.14                   # weight fraction of fixed carbon in wood
@@ -47,7 +50,7 @@ tar = states('tar').Y[:, 0]
 char = c3 * states('gaschar').Y[:, 0]
 
 # total mass fractions should equal one
-tot = wood + gas + tar + char
+tot2 = wood + gas + tar + char
 
 # Print
 # ----------------------------------------------------------------------------
@@ -74,6 +77,7 @@ ax.plot(states.t, states('wood').Y[:, 0], label='wood')
 ax.plot(states.t, states('gas').Y[:, 0], label='gas')
 ax.plot(states.t, states('tar').Y[:, 0], label='tar')
 ax.plot(states.t, states('gaschar').Y[:, 0], label='gaschar')
+ax.plot(states.t, tot1, 'k:', label='total')
 ax.grid(color='0.9')
 ax.legend(loc='best')
 ax.set_frame_on(False)
@@ -86,7 +90,7 @@ ax.plot(states.t, wood, label='wood')
 ax.plot(states.t, gas, label='gas')
 ax.plot(states.t, tar, label='tar')
 ax.plot(states.t, char, label='char')
-ax.plot(states.t, tot, 'k:', label='total')
+ax.plot(states.t, tot2, 'k:', label='total')
 ax.grid(color='0.9')
 ax.legend(loc='best')
 ax.set_frame_on(False)

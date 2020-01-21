@@ -56,7 +56,7 @@ for tm in time:
 # Print
 # ----------------------------------------------------------------------------
 
-print('--- Final mass fractions ---')
+print('--- Final Yields ---')
 for sp in states.species_names:
     print(f"{sp:11} {states(sp).Y[:, 0][-1]:.4f}")
 
