@@ -1,0 +1,398 @@
+#
+# Biomass pyrolysis kinetic reactions for hardwood based on Debiagi 2018.
+#
+# P. Debiagi, G. Gentile, A. Cuoci, A. Frassoldati, E. Ranzi, and T.
+# Faravelli. A predictive model of biochar formation and characterization.
+# Journal of Analytical and Applied Pyrolysis, vol. 134, pp. 326-335, 2018.
+#
+
+#-------------------------------------------------------------------------------
+# Phases data
+#-------------------------------------------------------------------------------
+
+units(
+    length = "m",
+    mass = "kg",
+    quantity = "mol",
+    time = "s",
+    energy = "J",
+    act_energy = "cal/mol",
+    pressure = "Pa"
+)
+
+ideal_gas(
+    elements = "C H O",
+    species = """
+            CELL CELLA CH2OHCHO CHOCHO CH3CHO C6H6O3 C2H5CHO CH3OH CH2O CO GCO
+            CO2 H2 H2O GCH2O HCOOH CH2OHCH2CHO CH4 GH2 CHAR C6H10O5 GCOH2 XYHW
+            HCE1 HCE2 C5H8O4 FURFURAL GCO2 GCH4 C2H4 GC2H4 GC2H6 C2H5OH CH3CO2H
+            GCH3OH LIGH LIGOH C2H6 LIGO LIGC LIGCC VANILLIN C6H5OCH3 CRESOL LIG
+            C24H28O4 C2H3CHO TGL MLINO U2ME12 TANN C6H5OH GC6H5OH ITANN ACQUA
+            """,
+    reactions = "all"
+)
+
+#-------------------------------------------------------------------------------
+# Species data
+#-------------------------------------------------------------------------------
+
+species(
+    name = "CELL",
+    atoms = "C:6 H:10 O:5",
+    note = "cellulose"
+)
+
+species(
+    name = "CELLA",
+    atoms = "C:6 H:10 O:5",
+    note = "active cellulose"
+)
+
+species(
+    name = "CH2OHCHO",
+    atoms = "C:2 H:4 O:2"
+)
+
+species(
+    name = "CHOCHO",
+    atoms = "C:2 H:2 O:2"
+)
+
+species(
+    name = "CH3CHO",
+    atoms = "C:2 H:4 O:1"
+)
+
+species(
+    name = "C6H6O3",
+    atoms = "C:6 H:6 O:3"
+)
+
+species(
+    name = "C2H5CHO",
+    atoms = "C:3 H:6 O:1"
+)
+
+species(
+    name = "CH3OH",
+    atoms = "C:1 H:4 O:1"
+)
+
+species(
+    name = "CH2O",
+    atoms = "C:1 H:2 O:1"
+)
+
+species(
+    name = "CO",
+    atoms = "C:1 O:1"
+)
+
+species(
+    name = "GCO",
+    atoms = "C:1 O:1"
+)
+
+species(
+    name = "CO2",
+    atoms = "C:1 O:2"
+)
+
+species(
+    name = "H2",
+    atoms = "H:2"
+)
+
+species(
+    name = "H2O",
+    atoms = "H:2 O:1"
+)
+
+species(
+    name = "GCH2O",
+    atoms = "C:1 H:2 O:1"
+)
+
+species(
+    name = "HCOOH",
+    atoms = "C:1 H:2 O:2"
+)
+
+species(
+    name = "CH2OHCH2CHO",
+    atoms = "C:3 H:6 O:2"
+)
+
+species(
+    name = "CH4",
+    atoms = "C:1 H:4"
+)
+
+species(
+    name = "GH2",
+    atoms = "H:2"
+)
+
+species(
+    name = "CHAR",
+    atoms = "C:1"
+)
+
+species(
+    name = "C6H10O5",
+    atoms = "C:6 H:10 O:5"
+)
+
+species(
+    name = "GCOH2",
+    atoms = "C:1 H:2 O:1"
+)
+
+species(
+    name = "XYHW",
+    atoms = "C:5 H:8 O:4",
+    note = "hemicellulose hardwood"
+)
+
+species(
+    name = "HCE1",
+    atoms = "C:5 H:8 O:4",
+    note = "hemicellulose"
+)
+
+species(
+    name = "HCE2",
+    atoms = "C:5 H:8 O:4",
+    note = "hemicellulose"
+)
+
+species(
+    name = "C5H8O4",
+    atoms = "C:5 H:8 O:4"
+)
+
+species(
+    name = "FURFURAL",
+    atoms = "C:5 H:4 O:2"
+)
+
+species(
+    name = "GCO2",
+    atoms = "C:1 O:2"
+)
+
+species(
+    name = "GCH4",
+    atoms = "C:1 H:4"
+)
+
+species(
+    name = "C2H4",
+    atoms = "C:2 H:4"
+)
+
+species(
+    name = "GC2H4",
+    atoms = "C:2 H:4"
+)
+
+species(
+    name = "GC2H6",
+    atoms = "C:2 H:6"
+)
+
+species(
+    name = "C2H5OH",
+    atoms = "C:2 H:6 O:1"
+)
+
+species(
+    name = "CH3CO2H",
+    atoms = "C:2 H:4 O:2"
+)
+
+species(
+    name = "GCH3OH",
+    atoms = "C:1 H:4 O:1"
+)
+
+species(
+    name = "LIGH",
+    atoms = "C:22 H:28 O:9"
+)
+
+species(
+    name = "LIGOH",
+    atoms = "C:19 H:22 O:8"
+)
+
+species(
+    name = "C2H6",
+    atoms = "C:2 H:6"
+)
+
+species(
+    name = "C2H6",
+    atoms = "C:2 H:6"
+)
+
+species(
+    name = "LIGO",
+    atoms = "C:20 H:22 O:10"
+)
+
+species(
+    name = "LIGC",
+    atoms = "C:15 H:14 O:4"
+)
+
+species(
+    name = "LIGCC",
+    atoms = "C:15 H:14 O:4"
+)
+
+species(
+    name = "VANILLIN",
+    atoms = "C:8 H:8 O:3"
+)
+
+species(
+    name = "C6H5OCH3",
+    atoms = "C:7 H:8 O:1"
+)
+
+species(
+    name = "CRESOL",
+    atoms = "C:7 H:8 O:1"
+)
+
+species(
+    name = "LIG",
+    atoms = "C:11 H:12 O:4"
+)
+
+species(
+    name = "C24H28O4",
+    atoms = "C:24 H:28 O:4"
+)
+
+species(
+    name = "C2H3CHO",
+    atoms = "C:3 H:4 O:1"
+)
+
+species(
+    name = "TGL",
+    atoms = "C:57 H:100 O:7"
+)
+
+species(
+    name = "MLINO",
+    atoms = "C:19 H:34 O:2"
+)
+
+species(
+    name = "U2ME12",
+    atoms = "C:13 H:22 O:2"
+)
+
+species(
+    name = "TANN",
+    atoms = "C:15 H:12 O:7"
+)
+
+species(
+    name = "C6H5OH",
+    atoms = "C:6 H:6 O:1"
+)
+
+species(
+    name = "GC6H5OH",
+    atoms = "C:6 H:6 O:1"
+)
+
+species(
+    name = "ITANN",
+    atoms = "C:8 H:4 O:4"
+)
+
+species(
+    name = "ACQUA",
+    atoms = "H:2 O:1"
+)
+
+#-------------------------------------------------------------------------------
+# Reaction data
+#-------------------------------------------------------------------------------
+
+# --- Cellulose ---
+
+reaction("CELL => CELLA", [1.5e14, 0, 47000])
+
+reaction("CELLA => 0.40 CH2OHCHO + 0.03 CHOCHO + 0.17 CH3CHO + 0.25 C6H6O3 + 0.35 C2H5CHO + 0.20 CH3OH + 0.15 CH2O + 0.49 CO + 0.05 GCO + 0.43 CO2 + 0.13 H2 + 0.93 H2O + 0.05 GCH2O + 0.02 HCOOH + 0.05 CH2OHCH2CHO + 0.05 CH4 + 0.1 GH2 + 0.66 CHAR", [2.5e6,  0, 19100])
+
+reaction("CELLA => C6H10O5", [3.3, 1, 10000])
+
+reaction("CELL => 4.45 H2O + 5.45 CHAR + 0.12 GCOH2 + 0.18 GCH2O + 0.25 GCO + 0.125 GH2 + 0.125 H2", [9e7, 0, 31000])
+
+# --- Hemicellulose ---
+
+reaction("XYHW => 0.35 HCE1 + 0.65 HCE2", [1.25e11, 0, 31400])
+
+reaction("HCE1 => 0.25 C5H8O4 + 0.25 C6H10O5 + 0.16 FURFURAL + 0.13 C6H6O3 + 0.09 CO2 + 0.1 CH4 + 0.54 H2O + 0.06 CH2OHCH2CHO + 0.1 CHOCHO + 0.02 H2 + 0.1 CHAR", [1.6e1, 1, 12900])
+
+reaction("HCE1 => 0.4 H2O + 0.39 CO2 + 0.05 HCOOH + 0.49 CO + 0.01 GCO + 0.51 GCO2 + 0.05 GH2 + 0.4 CH2O + 0.43 GCH2O + 0.3 CH4 + 0.325 GCH4 + 0.1 C2H4 + 0.075 GC2H4 + 0.975 CHAR + 0.37 GCOH2 + 0.1 H2 + 0.2 GC2H6", [3.0e-3, 1, 3600])
+
+reaction("HCE2 => 0.3 CO + 0.5125 CO2 + 0.1895 CH4 + 0.5505 H2 + 0.056 H2O + 0.049 C2H5OH + 0.035 CH2OHCHO + 0.105 CH3CO2H + 0.0175 HCOOH + 0.145 FURFURAL + 0.05 GCH4 + 0.105 GCH3OH + 0.1 GC2H4 + 0.45 GCO2 + 0.18 GCH2O + 0.7125 CHAR + 0.21 GH2 + 0.78 GCOH2 + 0.2 GC2H6", [7.0e9, 0, 30500])
+
+# --- Lignins ---
+
+reaction("LIGH => LIGOH + 0.5 C2H5CHO + 0.4 C2H4 + 0.2 CH2OHCHO + 0.1 CO + 0.1 C2H6", [6.7e12, 0, 37500])
+
+reaction("LIGO => LIGOH + CO2", [3.3e8, 0, 25500])
+
+reaction("LIGC => 0.35 LIGCC + 0.1 VANILLIN + 0.1 C6H5OCH3 + 0.27 C2H4 + H2O + 0.17 GCH2O + 0.4 GCOH2 + 0.22 CH2O + 0.21 CO + 0.1 CO2 + 0.36 GCH4 + 5.85 CHAR + 0.2 GC2H6 + 0.1 GH2", [1.0e11, 0, 37200])
+
+reaction("LIGCC => 0.25 VANILLIN + 0.15 CRESOL + 0.15 C6H5OCH3 + 0.35 CH2OHCHO + 0.7 H2O + 0.45 CH4 + 0.3 C2H4 + 0.7 H2 + 1.15 CO + 0.4 GCO + 6.80 CHAR + 0.4 C2H6", [1.0e4, 0, 24800])
+
+reaction("LIGOH => 0.9 LIG + H2O + 0.1 CH4 + 0.6 CH3OH + 0.3 GCH3OH + 0.05 CO2 + 0.65 CO + 0.6 GCO + 0.05 HCOOH + 0.45 GCH2O + 0.40 GCOH2 + 0.25 GCH4 + 0.1 GC2H4 + 0.15 GC2H6 + 4.25 CHAR + 0.025 C24H28O4 + 0.1 C2H3CHO", [1.5e8, 0, 30000])
+
+reaction("LIG => VANILLIN + 0.1 C6H5OCH3 + 0.5 C2H4 + 0.6 CO + 0.3 CH3CHO + 0.1 CHAR", [4.0, 1, 12000])
+
+reaction("LIG => 0.6 H2O + 0.3 CO + 0.1 CO2 + 0.2 CH4 + 0.4 CH2O + 0.2 GCO + 0.4 GCH4 + 0.5 GC2H4 + 0.4 GCH3OH + 1.25 GCH2O + 0.65 GCOH2 + 6.1 CHAR + 0.1 GH2", [8.3e2, 1, 8000])
+
+reaction("LIG => 0.6 H2O + 2.6 CO + 0.6 CH4 + 0.4 CH2O + 0.75 C2H4 + 0.4 CH3OH + 4.5 CHAR + 0.5 C2H6", [1.5e9, 0, 31500])
+
+# --- Extractives ---
+
+reaction("TGL => C2H3CHO + 2.5 MLINO + 0.5 U2ME12", [7.0e12, 0, 45700])
+
+reaction("TANN => 0.85 C6H5OH + 0.15 GC6H5OH + GCO + H2O + ITANN", [2.0e1, 0, 10000])
+
+reaction("ITANN => 5 CHAR + 2 CO + H2O + 0.55 GCH2O + 0.45 GCOH2", [1.0e3, 0, 25000])
+
+# --- Metaplastic ---
+
+reaction("GCO2 => CO2", [1.0e6, 0, 24500])
+
+reaction("GCO => CO", [5.0e12, 0, 52500])
+
+reaction("GCH3OH => CH3OH", [2.0e12, 0, 50000])
+
+reaction("GCH2O => 0.8 CHAR + 0.8 H2O + 0.2 CO + 0.2 H2", [6.0e10, 0, 50000])
+
+reaction("GC2H6 => C2H6", [1.0e11, 0, 52000])
+
+reaction("GCH4 => CH4", [1.0e11, 0, 53000])
+
+reaction("GC2H4 => C2H4", [1.0e11, 0, 54000])
+
+reaction("GC6H5OH => C6H5OH", [1.5e12, 0, 55000])
+
+reaction("GCOH2 => 0.2 CHAR + 0.2 H2O + 0.8 CO + 0.8 H2", [1.0e9, 0, 59000])
+
+reaction("GH2 => H2", [1.8e8, 0, 70000])
+
+# --- Water Evaporation ---
+
+reaction("ACQUA => H2O", [1.0, 1, 8000])
