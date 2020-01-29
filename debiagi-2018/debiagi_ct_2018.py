@@ -26,16 +26,19 @@ tk = 773.15     # reactor temperature [K]
 p = 101325.0    # reactor pressure [Pa]
 
 # initial mass fractions for softwood [-] and specify cti file
+# label = 'Softwood'
 # y0 = 'CELL:0.4002 GMSW:0.3112 LIGC:0.0287 LIGH:0.0196 LIGO:0.1379 TANN:0.0083 TGL:0.0941'
 # gas = ct.Solution('debiagi_sw.cti')
 
 # initial mass fractions for hardwood [-] and specify cti file
-y0 = 'CELL:0.4109 XYHW:0.3150 LIGC:0.0202 LIGH:0.0133 LIGO:0.1443 TANN:0.0176 TGL:0.0786'
-gas = ct.Solution('debiagi_hw.cti')
+# label = 'Hardwood'
+# y0 = 'CELL:0.4109 XYHW:0.3150 LIGC:0.0202 LIGH:0.0133 LIGO:0.1443 TANN:0.0176 TGL:0.0786'
+# gas = ct.Solution('debiagi_hw.cti')
 
 # initial mass fractions for grass [-] and specify cti file
-# y0 = 'CELL:0.4232 XYGR:0.3465 LIGC:0.0059 LIGH:0.0167 LIGO:0.1086 TANN:0.0095 TGL:0.0845'
-# gas = ct.Solution('debiagi_gr.cti')
+label = 'Grass'
+y0 = 'CELL:0.4232 XYGR:0.3465 LIGC:0.0059 LIGH:0.0167 LIGO:0.1086 TANN:0.0095 TGL:0.0845'
+gas = ct.Solution('debiagi_gr.cti')
 
 # time vector to evaluate reaction rates [s]
 time = np.linspace(0, 2.0, 100)
@@ -56,7 +59,8 @@ for tm in time:
 # Print
 # ----------------------------------------------------------------------------
 
-print('--- Final Yields ---')
+print(f'--- {label} Final Yields ---')
+print(f'Number of species = {len(states.species_names)}')
 for sp in states.species_names:
     print(f"{sp:11} {states(sp).Y[:, 0][-1]:.4f}")
 
@@ -76,8 +80,8 @@ def config(ax, xlabel, ylabel):
 fig, ax = plt.subplots(tight_layout=True)
 ax.plot(states.t, states('CELL').Y[:, 0], label='CELL')
 # ax.plot(states.t, states('GMSW').Y[:, 0], label='GMSW')
-ax.plot(states.t, states('XYHW').Y[:, 0], label='XYHW')
-# ax.plot(states.t, states('XYGR').Y[:, 0], label='XYGR')
+# ax.plot(states.t, states('XYHW').Y[:, 0], label='XYHW')
+ax.plot(states.t, states('XYGR').Y[:, 0], label='XYGR')
 ax.plot(states.t, states('LIGC').Y[:, 0], label='LIGC')
 ax.plot(states.t, states('LIGH').Y[:, 0], label='LIGH')
 ax.plot(states.t, states('LIGO').Y[:, 0], label='LIGO')

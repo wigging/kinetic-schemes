@@ -5,6 +5,9 @@
 # Faravelli. A predictive model of biochar formation and characterization.
 # Journal of Analytical and Applied Pyrolysis, vol. 134, pp. 326-335, 2018.
 #
+# species G{COH2} stiff is represented by GCOH2
+# species G{COH2} loose is represented by GCH2O
+#
 
 #-------------------------------------------------------------------------------
 # Phases data
@@ -379,6 +382,7 @@ reaction("GCO => CO", [5.0e12, 0, 52500])
 
 reaction("GCH3OH => CH3OH", [2.0e12, 0, 50000])
 
+# GCH2O is G{COH2} loose
 reaction("GCH2O => 0.8 CHAR + 0.8 H2O + 0.2 CO + 0.2 H2", [6.0e10, 0, 50000])
 
 reaction("GC2H6 => C2H6", [1.0e11, 0, 52000])
@@ -389,6 +393,7 @@ reaction("GC2H4 => C2H4", [1.0e11, 0, 54000])
 
 reaction("GC6H5OH => C6H5OH", [1.5e12, 0, 55000])
 
+# GCOH2 is G{COH2} stiff
 reaction("GCOH2 => 0.2 CHAR + 0.2 H2O + 0.8 CO + 0.8 H2", [1.0e9, 0, 59000])
 
 reaction("GH2 => H2", [1.8e8, 0, 70000])
