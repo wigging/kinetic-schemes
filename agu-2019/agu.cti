@@ -1,0 +1,64 @@
+# Kinetic scheme for biomass fast pyrolysis based on Agu 2019 paper.
+#
+# Cornelius E. Agu, Christoph Pfeifer, Marianne Eikeland, Lars-Andre Tokheim,
+# and Britt M.E. Moldestad. Detailed One-Dimensional Model for Steam-Biomass
+# Gasification in a Bubbling Fluidized Bed. Energy and Fuels, vol. 33, pp.
+# 7385-7397, 2019.
+#
+# flake8: noqa
+
+#-------------------------------------------------------------------------------
+# Phases data
+#-------------------------------------------------------------------------------
+
+units(
+    length="m",
+    mass="kg",
+    quantity="mol",
+    time="s",
+    energy="J",
+    act_energy="kJ/mol",
+    pressure="Pa"
+)
+
+ideal_gas(
+    elements="C",
+    species="biomass char tar volatiles",
+    reactions="all"
+)
+
+#-------------------------------------------------------------------------------
+# Species data
+#-------------------------------------------------------------------------------
+
+species(
+    name="biomass",
+    atoms="C:1"
+)
+
+species(
+    name="char",
+    atoms="C:1"
+)
+
+species(
+    name="tar",
+    atoms="C:1"
+)
+
+species(
+    name="volatiles",
+    atoms="C:1"
+)
+
+#-------------------------------------------------------------------------------
+# Reaction data
+#-------------------------------------------------------------------------------
+
+reaction("biomass => volatiles", [1.30e8, 0, 140])
+
+reaction("biomass => tar", [2.00e8, 0, 133])
+
+reaction("biomass => char", [1.08e7, 0, 121])
+
+reaction("tar => volatiles", [1.00e5, 0, 93.3])
